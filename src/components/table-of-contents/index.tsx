@@ -1,7 +1,13 @@
 import React, { Children, useEffect, useRef, useState } from 'react';
 
-import { Stack, Text, Title, useMantineColorScheme } from '@mantine/core';
-import { Heading, getHeadings } from './getHeadings';
+import {
+  NavLink,
+  Stack,
+  Text,
+  Title,
+  useMantineColorScheme,
+} from '@mantine/core';
+import { Heading, getHeadings } from '../../lib/helpers/getHeadings';
 
 function getActiveElement(rects: DOMRect[]) {
   if (rects.length === 0) {
@@ -68,27 +74,20 @@ export function TableOfContents() {
     <Stack mt="lg" gap="xs">
       <Title order={4}>Table of contents</Title>
 
-      <Stack gap="xs">
+      <Stack gap={0}>
         {Children.toArray(
           filteredHeadings.map((heading, index) => (
-            <Text
-              component="a"
-              href={`#${heading.id}`}
-              c={
-                active === index
-                  ? colorScheme === 'light'
-                    ? 'brown.9'
-                    : 'brown.4'
-                  : colorScheme === 'light'
-                  ? 'dark.9'
-                  : 'gray.6'
-              }
-              style={{
-                marginLeft: `${(heading.depth - 1) * 10}px`,
+            <NavLink
+              styles={{
+                root: {
+                  backgroundColor: 'transparent',
+                },
               }}
-            >
-              {heading.content}
-            </Text>
+              href={`#${heading.id}`}
+              active={active === index}
+              pl={(heading.depth - 1) * 15}
+              label={heading.content}
+            />
           ))
         )}
       </Stack>

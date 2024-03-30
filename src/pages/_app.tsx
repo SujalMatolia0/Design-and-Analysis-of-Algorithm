@@ -1,70 +1,30 @@
 import '@/styles/globals.css';
 
 import '@mantine/core/styles.css';
-import '@mantine/nprogress/styles.css';
 import '@mantine/notifications/styles.css';
+import '@mantine/code-highlight/styles.css';
+import '@mantine/spotlight/styles.css';
 
 import dynamic from 'next/dynamic';
 
 import type { AppProps } from 'next/app';
-import {
-  createTheme,
-  defaultVariantColorsResolver,
-  MantineProvider,
-  VariantColorsResolver,
-} from '@mantine/core';
-import { NavigationProgress } from '@mantine/nprogress';
+import { createTheme, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import { Instrument_Sans } from 'next/font/google';
 import Head from 'next/head';
 import { MetaTagsComp } from '@/components/indie/meta-tags';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Script from 'next/script';
+import { instrumentSans } from '@/lib/font';
+import { CenterLoading } from '@/components/indie/center-loading';
 
 const NotesLayout = dynamic(
   () => import('@/components/layout/notes').then((mod) => mod.NotesLayout),
   {
     ssr: false,
+    loading: () => <CenterLoading height="100vh" />,
   }
 );
 
-const instrumentSans = Instrument_Sans({ subsets: ['latin'] });
-
-const variantColorResolver: VariantColorsResolver = (input) => {
-  const defaultResolvedColors = defaultVariantColorsResolver(input);
-
-  if (input.variant === 'subtle-light') {
-    return {
-      ...defaultResolvedColors,
-      background: 'transparent',
-      hover: 'var(--mantine-color-gray-1)',
-      color: 'var(--mantine-color-dark-9)',
-    };
-  }
-
-  if (input.variant === 'subtle-dark') {
-    return {
-      ...defaultResolvedColors,
-      background: 'transparent',
-      hover: 'rgba(255, 255, 255, 0.1)',
-      color: `var(--mantine-color-${input.theme.primaryColor}-${input.theme.primaryShade})`,
-    };
-  }
-
-  if (input.variant === 'filled') {
-    return {
-      ...defaultResolvedColors,
-      color: 'var(--mantine-color-dark-9)',
-      hover: `var(--mantine-color-${input.theme.primaryColor}-${input.theme.primaryShade})`,
-    };
-  }
-
-  return defaultResolvedColors;
-};
-
 const theme = createTheme({
-  variantColorResolver,
-
   fontFamily: instrumentSans.style.fontFamily,
   fontFamilyMonospace: 'Space Mono, monospace',
   headings: {
@@ -73,7 +33,6 @@ const theme = createTheme({
 
   colors: {
     brown: [
-      '#fefdfc',
       '#fcf9f6',
       '#f6eee7',
       '#f0e4d9',
@@ -84,17 +43,16 @@ const theme = createTheme({
       '#ad7f58',
       '#a07553',
       '#815e46',
-      '#3e332e',
     ],
   },
+
+  black: '#111110',
 
   defaultRadius: 'md',
 
   primaryColor: 'brown',
-  primaryShade: 4,
+  primaryShade: 9,
 });
-
-const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps, router }: AppProps) {
   const renderNotesShell = router.pathname.includes('/notes');
@@ -129,20 +87,18 @@ export default function App({ Component, pageProps, router }: AppProps) {
 
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <QueryClientProvider client={queryClient}>
-        <MantineProvider theme={theme}>
-          <NavigationProgress />
-          <Notifications />
 
-          {renderNotesShell ? (
-            <NotesLayout>
-              <Component {...pageProps} />
-            </NotesLayout>
-          ) : (
+      <MantineProvider theme={theme}>
+        <Notifications />
+
+        {renderNotesShell ? (
+          <NotesLayout>
             <Component {...pageProps} />
-          )}
-        </MantineProvider>
-      </QueryClientProvider>
+          </NotesLayout>
+        ) : (
+          <Component {...pageProps} />
+        )}
+      </MantineProvider>
     </>
   );
 }

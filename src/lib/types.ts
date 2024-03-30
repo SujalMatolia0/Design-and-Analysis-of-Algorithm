@@ -1,5 +1,6 @@
-export type NestedLink = {
-  title: string;
+export type NavLink = {
+  label: string;
   href: string;
-  category?: string;
+  group: string;
+  description: string;
 };
