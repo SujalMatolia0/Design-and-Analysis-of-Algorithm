@@ -1,0 +1,155 @@
+# Steps for solving a problem
+
+## Identify the problem
+
+**Example**
+
+Arrange four Queens ( *Q1* , *Q2* , *Q3* , *Q4* ) on a 4x4 chess board.
+
+<ChessBoard data={[
+    ["", "Q-B1", "", "Q-D1"],
+    ["Q-A2", "Q-B2", "Q-C2", ""],
+    ["Q-A3", "Q", "Q-C3", "Q-D3"],
+    ["Q-A4", "Q-B4", "Q-C4", ""]
+]} />
+
+## Identify the Conditions
+
+**Example**
+
+1. No two queens can be in the same row.
+2. No two queens can be in the same column.
+3. No two queens can be in the same diagonal.
+
+## Logic Building
+
+Dependents on the characteristics of the problems
+we can select or chose anyone of the following
+design strategies ( *Method to develop or design the logic* ).
+
+1. **Divide and Conquer**
+2. **Greedy Method**
+3. **Dynamic Programming**
+4. **Backtracking** ( *Expresive power is more as compared to other* )
+5. **Branch and Bound**
+
+## Validation
+
+It is done by mathematician who developed this algorithm or similar algorithm.
+
+Most of the algorithms are validated by using **Mathematical Induction Theorm**.
+
+for `n = 4` `TRUE`
+
+assume `n = k` `TRUE` ( *k is a assumption* )
+
+if you can make `n = k + 1` `TRUE`
+
+`∀ n ∈ N` ( *for all natural numbers* )
+
+## Analysis
+
+The process of comparing two algorithms <u>rate of growth</u> with respect to
+
+1. **Time Complexity ✰**
+2. **Space Complexity**
+3. **Network Bandwidth**
+4. **Minimum Number of Registers** etc.
+
+is called **Analysis of Algorithm**.
+
+### Comparision
+
+1. **Priari Analysis ✰✰** ( *Before Implementation* )
+2. **Posteriori Analysis** ( *After Implementation* )
+
+<br/>
+
+<Comparison title={["Priari Analysis", "Posteriori Analysis"]}>
+<div>
+    <div>
+        Analysis done Before executing the algorithm
+    </div>
+    <div>
+        Analysis done After executing the algorithm
+    </div>
+</div>
+<div>
+    <div>
+        It depends on the Principle called **Frequency Counting of Fundamental Instructions** ( *Number of ALU visits* )
+
+        <br/>
+
+        It Means that system independent analysis
+
+        <br/>
+
+        **Example**
+
+        `x = x + 1` ( *FIX* )
+
+        <br/>
+
+        Time Complexity
+
+        = `Constant`
+
+        = `O(1)`
+
+        = `Θ(1)`
+    </div>
+    <div>
+        It depends on **Operating System**, **CPU**, **Memory** etc.
+
+        <br/>
+
+        It Means that system dependent analysis
+
+        <br/>
+
+        **Example**
+
+        `x = x + 1`
+
+        <br/>
+
+        Time Complexity
+
+        = `0.2 ns` for `M/C 1`
+
+        = `0.3 ns` for `M/C 2`
+
+        = `0.4 ns` for `M/C 3`
+    </div>
+</div>
+<div>
+    <div>
+        It provides Uniform values
+    </div>
+    <div>
+        It provides Non-Uniform values
+    </div>
+</div>
+<div>
+    <div>
+        It provides Estemated cost / values
+    </div>
+    <div>
+        It provides Actual cost / values
+    </div>
+</div>
+</Comparison>
+
+<br/>
+
+## Implementation
+
+Publish your algorithm in journals, books, websites etc.
+
+## Testing and Debugging
+
+It is done by Programmer who works on your algorithm in real time environment like `c`, `c++`, `java`, `python` etc.
+
+## Maintenance
+
+It is implemented by Operation and Maintenance department in real market.

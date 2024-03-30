@@ -7,18 +7,24 @@ import { Mermaid } from './components/mermaid';
 import { z } from 'zod';
 import {
   Anchor,
-  Box,
+  Badge,
   Card,
+  Center,
   Code,
   Collapse,
+  Grid,
   Group,
   Paper,
+  SimpleGrid,
   Stack,
+  Text,
   alpha,
   useMantineColorScheme,
 } from '@mantine/core';
 import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { ICON_SIZE } from './lib/const';
+import { MDXErrorBlock } from './components/mdx/error-block';
+import { MDXComparison } from './components/mdx/comparison';
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -55,11 +61,7 @@ const codeBlockSchema = z.object({
 
 const codeBlockArraySchema = z.array(codeBlockSchema).min(1);
 
-const ErrBlock = ({ error }: { error: object }) => {
-  return (
-    <CodeHighlight language="json" code={JSON.stringify(error, null, 2)} />
-  );
-};
+const Alphabet = '#ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   const router = useRouter();
@@ -67,6 +69,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   const { colorScheme } = useMantineColorScheme();
 
   return {
+    SimpleGrid: SimpleGrid,
+    Group: Group,
+    Text: Text,
+    Center: Center,
+    Grid: Grid,
+    Paper: Paper,
+    Stack: Stack,
+    Comparison: MDXComparison,
+
     h1: ({ children }) => (
       <h1
         data-mdx-heading
@@ -112,7 +123,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!parseResult.success) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Invalid code block',
               component: 'CodeS',
@@ -145,7 +156,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!parseResult.success) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Invalid code block',
               component: 'Mer',
@@ -158,7 +169,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       // language should be mermaid
       if (parseResult.data.props.children.props.className !== 'mermaid') {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Invalid language, it should be mermaid',
               language: parseResult.data.props.children.props.className,
@@ -194,7 +205,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!parseResult.success) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Invalid code block',
               component: 'CodeM',
@@ -206,7 +217,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!fileNames || fileNames.length === 0) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'File names are missing',
               component: 'CodeM',
@@ -217,7 +228,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (parseResult.data?.length !== fileNames.length) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Code blocks and file names count mismatch',
               codeBlocksCount: parseResult.data.length,
@@ -284,7 +295,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!title) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Title is missing',
               component: 'Cola',
@@ -327,6 +338,67 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             <Stack>{children}</Stack>
           </Collapse>
         </Paper>
+      );
+    },
+
+    Tag: ({ data }: { data: string[] }) => {
+      if (!data || data.length === 0) {
+        return (
+          <MDXErrorBlock
+            error={{
+              message: 'Data is missing',
+              component: 'Tag',
+            }}
+          />
+        );
+      }
+
+      return (
+        <Group>
+          {Children.toArray(data).map((item) => (
+            <>
+              <Badge>{item}</Badge>
+            </>
+          ))}
+        </Group>
+      );
+    },
+
+    ChessBoard: ({ data }: { data: string[][] }) => {
+      return (
+        <Stack>
+          {Children.toArray(
+            data.map((item, index) => (
+              <SimpleGrid cols={item.length + 1}>
+                <Center h="100%">
+                  <Text ta="center" fw="bold">
+                    {index + 1}
+                  </Text>
+                </Center>
+
+                {item.map((subItem) => (
+                  <>
+                    <Paper withBorder radius={0} h={45} px={5}>
+                      <Center h="100%">
+                        <Text fw="bold">{subItem}</Text>
+                      </Center>
+                    </Paper>
+                  </>
+                ))}
+              </SimpleGrid>
+            ))
+          )}
+
+          <SimpleGrid cols={data[0].length + 1}>
+            {Children.toArray(
+              Array.from({ length: data[0].length + 1 }).map((_, index) => (
+                <Text ta="center" fw="bold">
+                  {Alphabet[index]}
+                </Text>
+              ))
+            )}
+          </SimpleGrid>
+        </Stack>
       );
     },
 
