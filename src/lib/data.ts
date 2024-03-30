@@ -1,5 +1,4 @@
 import { NavLink } from './types';
-import { SpotlightActionData } from '@mantine/spotlight';
 
 export const NavLinks: NavLink[] = [
   {
@@ -28,21 +27,21 @@ export const NavLinks: NavLink[] = [
   },
 ];
 
-export const getNestedLink = (href: string): NavLink | null => {
+export const getLinkByHref = (href: string): NavLink | null => {
   return NavLinks.find((link) => link.href === href) || null;
 };
 
-export const getLinkByGroup = (group: string): NavLink[] => {
+const getLinksByGroup = (group: string): NavLink[] => {
   return NavLinks.filter((link) => link.group === group);
 };
 
 export const NavNestedLinks: { category: string; links: NavLink[] }[] = [
   {
     category: 'Chapter 1',
-    links: getLinkByGroup('Chapter 1'),
+    links: getLinksByGroup('Chapter 1'),
   },
   {
     category: 'Chapter 2',
-    links: getLinkByGroup('Chapter 2'),
+    links: getLinksByGroup('Chapter 2'),
   },
 ];

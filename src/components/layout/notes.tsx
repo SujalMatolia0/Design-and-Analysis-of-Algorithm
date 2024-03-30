@@ -179,7 +179,7 @@ export const NotesLayout = ({ children }: { children: React.ReactNode }) => {
                 <Button
                   variant="transparent"
                   component={Link}
-                  href={`https://github.com/mohitxskull/Design-and-Analysis-of-Algorithm/blob/main/src/pages${router.asPath}.mdx`}
+                  href={`https://github.com/mohitxskull/Design-and-Analysis-of-Algorithm/blob/main/src/pages${router.pathname}.mdx`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
