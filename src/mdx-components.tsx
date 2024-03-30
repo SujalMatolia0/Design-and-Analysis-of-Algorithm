@@ -306,7 +306,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
               borderBottom: !Open
                 ? 'none'
-                : '1px solid var(--mantine-color-dark-4)',
+                : `1px solid var(--mantine-color-${
+                    colorScheme === 'light' ? 'gray-3' : 'dark-4'
+                  })`,
             }}
             onClick={() => setOpen(!Open)}
           >

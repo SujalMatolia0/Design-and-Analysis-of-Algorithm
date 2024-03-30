@@ -1,45 +1,48 @@
-import { NestedLink } from './types';
+import { NavLink } from './types';
+import { SpotlightActionData } from '@mantine/spotlight';
 
-export const NavSectionNestedLinks: NestedLink[] = [
+export const NavLinks: NavLink[] = [
   {
-    title: 'Characteristics of Algorithms',
+    label: 'Characteristics of Algorithms',
     href: '/notes/chapter1/section1',
-    category: 'Chapter 1',
+    group: 'Chapter 1',
+    description: 'Characteristics of Algorithms',
   },
   {
-    title: 'Section 2',
+    label: 'Section 2',
     href: '/notes/chapter1/section2',
-    category: 'Chapter 1',
+    group: 'Chapter 1',
+    description: 'Section 2',
   },
   {
-    title: 'Section 1',
+    label: 'Section 1',
     href: '/notes/chapter2/section1',
+    group: 'Chapter 2',
+    description: 'Section 1',
   },
   {
-    title: 'Section 2',
+    label: 'Section 2',
     href: '/notes/chapter2/section2',
+    group: 'Chapter 2',
+    description: 'Section 2',
   },
 ];
 
-const categoryLinks = (category?: string) => {
-  if (!category) {
-    return NavSectionNestedLinks.filter((link) => !link.category);
-  }
-
-  return NavSectionNestedLinks.filter((link) => link.category === category);
+export const getNestedLink = (href: string): NavLink | null => {
+  return NavLinks.find((link) => link.href === href) || null;
 };
 
-export const getNestedLink = (href: string): NestedLink | null => {
-  return NavSectionNestedLinks.find((link) => link.href === href) || null;
+export const getLinkByGroup = (group: string): NavLink[] => {
+  return NavLinks.filter((link) => link.group === group);
 };
 
-export const NavSectionLinks: { category: string; links: NestedLink[] }[] = [
-  {
-    category: 'Introduction',
-    links: categoryLinks(),
-  },
+export const NavNestedLinks: { category: string; links: NavLink[] }[] = [
   {
     category: 'Chapter 1',
-    links: categoryLinks('Chapter 1'),
+    links: getLinkByGroup('Chapter 1'),
+  },
+  {
+    category: 'Chapter 2',
+    links: getLinkByGroup('Chapter 2'),
   },
 ];

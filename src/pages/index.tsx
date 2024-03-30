@@ -1,4 +1,4 @@
-import { NavSectionLinks } from '@/lib/data';
+import { NavNestedLinks } from '@/lib/data';
 import { Button, Center, Stack, Title } from '@mantine/core';
 import Link from 'next/link';
 
@@ -10,9 +10,8 @@ export default function Home() {
 
         <Button
           variant="transparent"
-          color="dark"
           component={Link}
-          href={NavSectionLinks[0].links[0].href}
+          href={NavNestedLinks[0].links[0].href}
         >
           Start
         </Button>

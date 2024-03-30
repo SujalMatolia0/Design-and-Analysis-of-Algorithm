@@ -158,12 +158,12 @@
   dependencies:
     "@mantine/store" "7.7.0"
 
-"@mantine/spotlight@^7.7.0":
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-7.7.0.tgz#cab5f3f0f5701569bbac9f21ffb2068b243e9614"
-  integrity sha512-i7VUDfMCACM0DYzVu80O1vAhHPrQq4zGcDyMB6LSK3kkDr4WuGKwmM176hY5GapZq9y/a8FWWVa2ytHn8PPpqQ==
+"@mantine/spotlight@^7.7.1":
+  version "7.7.1"
+  resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-7.7.1.tgz#c4b9b9c193e934f192b0cc3ccaa8e001aaf6381c"
+  integrity sha512-TL8C9ml7JbU5+vWvNAy6r0dGdBWi9O+umlv0CaAHAq4nIdK3gPhUSwGa3HImxKBx8/lPG8IrbJql1LzXrt64xA==
   dependencies:
-    "@mantine/store" "7.7.0"
+    "@mantine/store" "7.7.1"
 
 "@mantine/store@7.7.0":
   version "7.7.0"

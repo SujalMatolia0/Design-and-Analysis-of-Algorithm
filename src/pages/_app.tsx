@@ -1,26 +1,26 @@
 import '@/styles/globals.css';
 
 import '@mantine/core/styles.css';
-import '@mantine/nprogress/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/code-highlight/styles.css';
+import '@mantine/spotlight/styles.css';
 
 import dynamic from 'next/dynamic';
 
 import type { AppProps } from 'next/app';
 import { createTheme, MantineProvider } from '@mantine/core';
-import { NavigationProgress } from '@mantine/nprogress';
 import { Notifications } from '@mantine/notifications';
 import Head from 'next/head';
 import { MetaTagsComp } from '@/components/indie/meta-tags';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Script from 'next/script';
 import { instrumentSans } from '@/lib/font';
+import { CenterLoading } from '@/components/indie/center-loading';
 
 const NotesLayout = dynamic(
   () => import('@/components/layout/notes').then((mod) => mod.NotesLayout),
   {
     ssr: false,
+    loading: () => <CenterLoading height="100vh" />,
   }
 );
 
@@ -53,8 +53,6 @@ const theme = createTheme({
   primaryColor: 'brown',
   primaryShade: 9,
 });
-
-const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps, router }: AppProps) {
   const renderNotesShell = router.pathname.includes('/notes');
@@ -89,20 +87,18 @@ export default function App({ Component, pageProps, router }: AppProps) {
 
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <QueryClientProvider client={queryClient}>
-        <MantineProvider theme={theme}>
-          <NavigationProgress />
-          <Notifications />
 
-          {renderNotesShell ? (
-            <NotesLayout>
-              <Component {...pageProps} />
-            </NotesLayout>
-          ) : (
+      <MantineProvider theme={theme}>
+        <Notifications />
+
+        {renderNotesShell ? (
+          <NotesLayout>
             <Component {...pageProps} />
-          )}
-        </MantineProvider>
-      </QueryClientProvider>
+          </NotesLayout>
+        ) : (
+          <Component {...pageProps} />
+        )}
+      </MantineProvider>
     </>
   );
 }
