@@ -21,4 +21,7 @@ body {
   -webkit-overflow-scrolling: touch;
 
   font-size: 75%;
+
+  /* smooth scroll */
+  scroll-behavior: smooth;
 }

@@ -16,13 +16,10 @@ import { Notifications } from '@mantine/notifications';
 import { Instrument_Sans } from 'next/font/google';
 import Head from 'next/head';
 import { MetaTagsComp } from '@/components/indie/meta-tags';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { NotesLayout } from '@/components/layout/notes';
+import { useEffect, useState } from 'react';
+import Script from 'next/script';
 
 const instrumentSans = Instrument_Sans({ subsets: ['latin'] });
 
@@ -92,29 +89,63 @@ const theme = createTheme({
 
 const queryClient = new QueryClient();
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps, router }: AppProps) {
+  const [isClient, setIsClient] = useState(false);
+
+  const renderNotesShell = router.pathname.includes('/notes');
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
+
   return (
     <>
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GTAG}`}
+      />
+
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '${process.env.NEXT_PUBLIC_GTAG}');
+        `}
+      </Script>
       <Head>
-        <title>D.A.A</title>
+        <title>Design and Analysis of Algorithms</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <MetaTagsComp
-          title="D.A.A"
+          title="Design and Analysis of Algorithms"
           description="Notes of Design and Analysis of Algorithms"
           siteName="D.A.A"
           url="https://daa.mohitxskull.dev/"
           twitterHandle="mohitxskull"
-          image="https://daa.mohitxskull.dev/og-image.png"
+          image="https://daa.mohitxskull.dev/og-banner.png"
         />
+
+        <link rel="icon" href="/favi.png" />
       </Head>
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={theme}>
           <NavigationProgress />
           <Notifications />
 
-          <Component {...pageProps} />
+          {renderNotesShell ? (
+            <NotesLayout>
+              <Component {...pageProps} />
+            </NotesLayout>
+          ) : (
+            <Component {...pageProps} />
+          )}
         </MantineProvider>
       </QueryClientProvider>
     </>

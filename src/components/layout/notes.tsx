@@ -1,5 +1,5 @@
 import { ICON_SIZE } from '@/lib/const';
-import { NavSectionLinks, getNestedLink } from '@/lib/data';
+import { NavSectionLinks } from '@/lib/data';
 import {
   ActionIcon,
   AppShell,
@@ -12,63 +12,32 @@ import {
   Stack,
   Text,
   Title,
-  TypographyStylesProvider,
   useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconMoon, IconSun } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Children, useEffect, useState } from 'react';
-import { NestedLink } from '@/lib/types';
-import { useQuery } from '@tanstack/react-query';
-import { marked } from 'marked';
-import { CenterMessage } from '@/components/indie/center-message';
-import { CenterLoading } from '@/components/indie/center-loading';
+import { Children } from 'react';
+import { TableOfContents } from '../table-of-contents';
 
-export default function Notes() {
-  const [ActivePage, setActivePage] = useState<NestedLink | null>(null);
-
-  const GetApi = useQuery({
-    queryKey: ['markdown', ActivePage?.markdown],
-    queryFn: async () => {
-      console.log('ActivePage', ActivePage);
-
-      if (!ActivePage) {
-        return null;
-      }
-
-      const response = await fetch(ActivePage.markdown);
-
-      if (!response.ok) {
-        return null;
-      }
-
-      const rawMarkdown = await response.text();
-
-      const parsedMarkdown = await marked.parse(rawMarkdown);
-
-      return parsedMarkdown;
-    },
-    staleTime: 1000 * 60 * 60 * 24,
-    enabled: !!ActivePage,
-  });
-
+export const NotesLayout = ({ children }: { children: React.ReactNode }) => {
   const [opened, { toggle }] = useDisclosure();
 
   const router = useRouter();
 
   const { toggleColorScheme, colorScheme } = useMantineColorScheme();
 
-  useEffect(() => {
-    setActivePage(getNestedLink(router.asPath));
-  }, [router.asPath, router.isReady]);
-
   return (
     <AppShell
-      header={{ height: 80 }}
+      header={{ height: 80, offset: true }}
       navbar={{ width: 350, breakpoint: 'sm', collapsed: { mobile: !opened } }}
-      padding="md"
+      aside={{
+        width: 300,
+        breakpoint: 'md',
+        collapsed: { desktop: false, mobile: true },
+      }}
+      padding="xl"
     >
       <AppShell.Header>
         <Group
@@ -84,9 +53,16 @@ export default function Notes() {
               hiddenFrom="sm"
               size="sm"
             />
-            <Title maw={230} order={3} lh={1.1}>
+            <Text
+              maw={210}
+              size="xl"
+              lh={1.1}
+              fw="bold"
+              component={Link}
+              href="/"
+            >
               Design and Analysis of Algorithms
-            </Title>
+            </Text>
           </Group>
 
           <Group>
@@ -94,6 +70,8 @@ export default function Notes() {
               size="xl"
               variant="transparent"
               {...(colorScheme === 'light' ? { color: 'dark.9' } : {})}
+              component={Link}
+              href="https://github.com/mohitxskull/Design-and-Analysis-of-Algorithm"
             >
               <Box w={ICON_SIZE.LG + 5}>
                 <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -130,7 +108,7 @@ export default function Notes() {
                       <Button
                         size="md"
                         variant={
-                          ActivePage?.href === nestedLink.href
+                          router.pathname === nestedLink.href
                             ? 'filled'
                             : `subtle-${colorScheme}`
                         }
@@ -149,40 +127,13 @@ export default function Notes() {
           )}
         </Stack>
       </AppShell.Navbar>
+      <AppShell.Aside withBorder={false} p="md">
+        <TableOfContents />
+      </AppShell.Aside>
       <AppShell.Main>
         <Container>
-          <Stack>
-            {(() => {
-              if (GetApi.isLoading) {
-                return <CenterLoading height="calc(100vh - 140px)" />;
-              }
-
-              if (GetApi.isError) {
-                return (
-                  <CenterMessage
-                    height="calc(100vh - 140px)"
-                    title="Failed to load content"
-                    description="Please try again later"
-                  />
-                );
-              }
-
-              if (!GetApi.data) {
-                return (
-                  <CenterMessage
-                    height="calc(100vh - 140px)"
-                    title="No content found"
-                    description="Please try again later"
-                  />
-                );
-              }
-
-              return (
-                <TypographyStylesProvider>
-                  <div dangerouslySetInnerHTML={{ __html: GetApi.data }} />
-                </TypographyStylesProvider>
-              );
-            })()}
+          <Stack id="mdx">
+            {children}
 
             <Divider />
 
@@ -192,11 +143,12 @@ export default function Notes() {
               <Button
                 variant="transparent"
                 color="dark"
-                style={{
-                  pointerEvents: GetApi.data ? 'auto' : 'none',
-                }}
+                component={Link}
+                href={`https://github.com/mohitxskull/Design-and-Analysis-of-Algorithm/blob/main/src/pages${router.asPath}.mdx`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                {GetApi.data ? 'Edit this page on GitHub' : '404'}
+                Edit this page on GitHub
               </Button>
             </Group>
           </Stack>
@@ -204,4 +156,4 @@ export default function Notes() {
       </AppShell.Main>
     </AppShell>
   );
-}
+};

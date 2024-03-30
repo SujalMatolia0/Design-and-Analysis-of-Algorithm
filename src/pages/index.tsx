@@ -12,7 +12,7 @@ export default function Home() {
           variant="transparent"
           color="dark"
           component={Link}
-          href={`/notes${NavSectionLinks[0].links[0].href}`}
+          href={NavSectionLinks[0].links[0].href}
         >
           Start
         </Button>
