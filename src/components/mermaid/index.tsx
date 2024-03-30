@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import mermaid from 'mermaid';
 import { useMantineColorScheme } from '@mantine/core';
+import { instrumentSans } from '@/lib/font';
 
 export type MermaidProps = {
   chart: string;
@@ -13,6 +14,11 @@ export const Mermaid = ({ chart }: MermaidProps) => {
     mermaid.initialize({
       startOnLoad: true,
       theme: colorScheme === 'dark' ? 'dark' : 'light',
+      fontFamily: instrumentSans.style.fontFamily,
+      altFontFamily: instrumentSans.style.fontFamily,
+      flowchart: {
+        htmlLabels: true,
+      }
     });
 
     document

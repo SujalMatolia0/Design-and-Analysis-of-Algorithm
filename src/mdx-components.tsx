@@ -2,9 +2,23 @@ import type { MDXComponents } from 'mdx/types';
 import { toSlug } from './lib/helpers/toSlug';
 import { useRouter } from 'next/router';
 import { CodeHighlight, CodeHighlightTabs } from '@mantine/code-highlight';
-import { Children, useMemo } from 'react';
+import { Children, useMemo, useState } from 'react';
 import { Mermaid } from './components/mermaid';
 import { z } from 'zod';
+import {
+  Anchor,
+  Box,
+  Card,
+  Code,
+  Collapse,
+  Group,
+  Paper,
+  Stack,
+  alpha,
+  useMantineColorScheme,
+} from '@mantine/core';
+import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import { ICON_SIZE } from './lib/const';
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -15,7 +29,6 @@ const codeBlockSchema = z.object({
   type: z.literal('pre'),
   props: z.object({
     children: z.object({
-      type: z.literal('code'),
       props: z.object({
         className: z
           .string()
@@ -42,8 +55,16 @@ const codeBlockSchema = z.object({
 
 const codeBlockArraySchema = z.array(codeBlockSchema).min(1);
 
+const ErrBlock = ({ error }: { error: object }) => {
+  return (
+    <CodeHighlight language="json" code={JSON.stringify(error, null, 2)} />
+  );
+};
+
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   const router = useRouter();
+
+  const { colorScheme } = useMantineColorScheme();
 
   return {
     h1: ({ children }) => (
@@ -91,9 +112,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!parseResult.success) {
         return (
-          <CodeHighlight
-            language="json"
-            code={JSON.stringify(parseResult.error, null, 2)}
+          <ErrBlock
+            error={{
+              message: 'Invalid code block',
+              component: 'CodeS',
+              error: parseResult.error,
+            }}
           />
         );
       }
@@ -101,6 +125,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       return (
         <>
           <CodeHighlight
+            style={{
+              borderRadius: 'var(--mantine-radius-md)',
+            }}
             language={parseResult.data.props.children.props.className}
             code={parseResult.data.props.children.props.children}
           />
@@ -118,9 +145,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!parseResult.success) {
         return (
-          <CodeHighlight
-            language="json"
-            code={JSON.stringify(parseResult.error, null, 2)}
+          <ErrBlock
+            error={{
+              message: 'Invalid code block',
+              component: 'Mer',
+              error: parseResult.error,
+            }}
           />
         );
       }
@@ -128,16 +158,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       // language should be mermaid
       if (parseResult.data.props.children.props.className !== 'mermaid') {
         return (
-          <CodeHighlight
-            language="json"
-            code={JSON.stringify(
-              {
-                message: 'Invalid language, it should be mermaid',
-                language: parseResult.data.props.children.props.className,
-              },
-              null,
-              2
-            )}
+          <ErrBlock
+            error={{
+              message: 'Invalid language, it should be mermaid',
+              language: parseResult.data.props.children.props.className,
+            }}
           />
         );
       }
@@ -169,42 +194,35 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!parseResult.success) {
         return (
-          <CodeHighlight
-            language="json"
-            code={JSON.stringify(parseResult.error, null, 2)}
+          <ErrBlock
+            error={{
+              message: 'Invalid code block',
+              component: 'CodeM',
+              error: parseResult.error,
+            }}
           />
         );
       }
 
       if (!fileNames || fileNames.length === 0) {
         return (
-          <CodeHighlight
-            language="json"
-            code={JSON.stringify(
-              {
-                message: 'File names are missing',
-                fileNames,
-              },
-              null,
-              2
-            )}
+          <ErrBlock
+            error={{
+              message: 'File names are missing',
+              component: 'CodeM',
+            }}
           />
         );
       }
 
       if (parseResult.data?.length !== fileNames.length) {
         return (
-          <CodeHighlight
-            language="json"
-            code={JSON.stringify(
-              {
-                message: 'Code blocks and file names count mismatch',
-                codeBlocksCount: parseResult.data.length,
-                fileNamesCount: fileNames.length,
-              },
-              null,
-              2
-            )}
+          <ErrBlock
+            error={{
+              message: 'Code blocks and file names count mismatch',
+              codeBlocksCount: parseResult.data.length,
+              fileNamesCount: fileNames.length,
+            }}
           />
         );
       }
@@ -218,6 +236,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
               expandCodeLabel: 'Show full code',
               collapseCodeLabel: 'Show less',
             })}
+            style={{
+              borderRadius: 'var(--mantine-radius-md)',
+            }}
             code={parseResult.data.map((item, index) => {
               return {
                 fileName: `${fileNames[index]}.${item.props.children.props.className}`,
@@ -233,6 +254,80 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     Hi: ({ children }) => (
       <span style={{ backgroundColor: 'yellow' }}>{children}</span>
     ),
+
+    code: (props) => {
+      return (
+        <Code
+          {...props}
+          color={alpha(
+            `var(--mantine-color-brown-${colorScheme === 'dark' ? 9 : 7})`,
+            0.2
+          )}
+          c={`brown.${colorScheme === 'dark' ? 4 : 9}`}
+          fw="bold"
+        />
+      );
+    },
+
+    a: (props) => {
+      return <Anchor href={props.href}>{props.children}</Anchor>;
+    },
+
+    Cola: ({
+      children,
+      title,
+    }: {
+      children: React.ReactNode;
+      title: string;
+    }) => {
+      const [Open, setOpen] = useState(false);
+
+      if (!title) {
+        return (
+          <ErrBlock
+            error={{
+              message: 'Title is missing',
+              component: 'Cola',
+            }}
+          />
+        );
+      }
+
+      return (
+        <Paper withBorder>
+          <Card
+            py="md"
+            px="xl"
+            style={{
+              cursor: 'pointer',
+
+              borderBottomLeftRadius: Open ? 0 : 'var(--mantine-radius-md)',
+              borderBottomRightRadius: Open ? 0 : 'var(--mantine-radius-md)',
+
+              borderBottom: !Open
+                ? 'none'
+                : '1px solid var(--mantine-color-dark-4)',
+            }}
+            onClick={() => setOpen(!Open)}
+          >
+            <Group justify="space-between">
+              {title}
+
+              {Open ? (
+                <IconChevronUp size={ICON_SIZE.SM} />
+              ) : (
+                <IconChevronDown size={ICON_SIZE.SM} />
+              )}
+            </Group>
+          </Card>
+
+          <Collapse in={Open} p="xl">
+            <Stack>{children}</Stack>
+          </Collapse>
+        </Paper>
+      );
+    },
+
     ...components,
   };
 }

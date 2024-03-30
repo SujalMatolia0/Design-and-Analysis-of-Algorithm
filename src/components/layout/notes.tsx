@@ -9,6 +9,7 @@ import {
   Container,
   Divider,
   Group,
+  NavLink,
   Stack,
   Text,
   Title,
@@ -39,12 +40,12 @@ export const NotesLayout = ({ children }: { children: React.ReactNode }) => {
       }}
       padding="xl"
     >
-      <AppShell.Header>
+      <AppShell.Header zIndex={1000}>
         <Group
           h="100%"
           px="md"
           justify="space-between"
-          bg={colorScheme === 'light' ? 'brown.1' : 'transparent'}
+          bg={colorScheme === 'light' ? 'brown.0' : 'transparent'}
         >
           <Group>
             <Burger
@@ -99,26 +100,21 @@ export const NotesLayout = ({ children }: { children: React.ReactNode }) => {
           {Children.toArray(
             NavSectionLinks.map((link) => (
               <>
-                <Title px={23} order={4}>
+                <Title pl="lg" order={4}>
                   {link.category}
                 </Title>
                 <Stack gap={5}>
                   {Children.toArray(
                     link.links.map((nestedLink) => (
-                      <Button
-                        size="md"
-                        variant={
-                          router.pathname === nestedLink.href
-                            ? 'filled'
-                            : `subtle-${colorScheme}`
-                        }
-                        justify="left"
-                        fw="normal"
-                        component={Link}
+                      <NavLink
+                        style={{
+                          borderRadius: 'var(--mantine-radius-md)',
+                        }}
                         href={nestedLink.href}
-                      >
-                        {nestedLink.title}
-                      </Button>
+                        label={nestedLink.title}
+                        active={router.pathname === nestedLink.href}
+                        pl="lg"
+                      />
                     ))
                   )}
                 </Stack>
