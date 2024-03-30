@@ -4,13 +4,11 @@ export const NavSectionNestedLinks: NestedLink[] = [
   {
     title: 'Characteristics of Algorithms',
     href: '/notes/chapter1/section1',
-
     category: 'Chapter 1',
   },
   {
     title: 'Section 2',
     href: '/notes/chapter1/section2',
-
     category: 'Chapter 1',
   },
   {

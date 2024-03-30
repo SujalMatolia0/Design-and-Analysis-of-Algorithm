@@ -3,6 +3,7 @@ import '@/styles/globals.css';
 import '@mantine/core/styles.css';
 import '@mantine/nprogress/styles.css';
 import '@mantine/notifications/styles.css';
+import '@mantine/code-highlight/styles.css';
 
 import dynamic from 'next/dynamic';
 

@@ -1,7 +1,7 @@
 import React, { Children, useEffect, useRef, useState } from 'react';
 
 import { Stack, Text, Title, useMantineColorScheme } from '@mantine/core';
-import { Heading, getHeadings } from './getHeadings';
+import { Heading, getHeadings } from '../../lib/helpers/getHeadings';
 
 function getActiveElement(rects: DOMRect[]) {
   if (rects.length === 0) {
