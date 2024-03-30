@@ -15,7 +15,6 @@ import { NavigationProgress } from '@mantine/nprogress';
 import { Notifications } from '@mantine/notifications';
 import { Instrument_Sans } from 'next/font/google';
 import Head from 'next/head';
-import { MetaTagsComp } from '@/components/indie/meta-tags';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NotesLayout } from '@/components/layout/notes';
 import { useEffect, useState } from 'react';
@@ -121,18 +120,46 @@ export default function App({ Component, pageProps, router }: AppProps) {
       <Head>
         <title>Design and Analysis of Algorithms</title>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-        <MetaTagsComp
-          title="Design and Analysis of Algorithms"
-          description="Notes of Design and Analysis of Algorithms"
-          siteName="D.A.A"
-          url="https://daa.mohitxskull.dev/"
-          twitterHandle="mohitxskull"
-          image="https://daa.mohitxskull.dev/og-banner.png"
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
         />
 
-        <link rel="icon" href="/favi.png" />
+        <meta name="og:title" content="Design and Analysis of Algorithms" />
+        <meta name="og:type" content="website" />
+        <meta name="og:url" content="https://daa.mohitxskull.dev/" />
+        <meta
+          name="og:image"
+          content="https://daa.mohitxskull.dev/og-banner.png"
+        />
+        <meta
+          name="og:description"
+          content="Notes of Design and Analysis of Algorithms"
+        />
+        <meta name="og:site_name" content="D.A.A" />
+
+        <meta
+          name="description"
+          content="Notes of Design and Analysis of Algorithms"
+        />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="mohitxskull" />
+        <meta name="twitter:creator" content="mohitxskull" />
+        <meta
+          name="twitter:title"
+          content="Design and Analysis of Algorithms"
+        />
+        <meta
+          name="twitter:description"
+          content="Notes of Design and Analysis of Algorithms"
+        />
+        <meta
+          name="twitter:image"
+          content="https://daa.mohitxskull.dev/og-banner.png"
+        />
+
+        <link rel="icon" href="/favicon.png" />
       </Head>
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={theme}>
