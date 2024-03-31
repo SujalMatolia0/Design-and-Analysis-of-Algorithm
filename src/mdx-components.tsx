@@ -6,6 +6,7 @@ import { Children, useMemo, useState } from 'react';
 import { Mermaid } from './components/mermaid';
 import { z } from 'zod';
 import {
+  Alert,
   Anchor,
   Badge,
   Card,
@@ -25,6 +26,8 @@ import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { ICON_SIZE } from './lib/const';
 import { MDXErrorBlock } from './components/mdx/error-block';
 import { MDXComparison } from './components/mdx/comparison';
+import { AreaChart } from '@mantine/charts';
+import { MDXHoverCard } from './components/mdx/hover-card';
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -76,25 +79,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     Grid: Grid,
     Paper: Paper,
     Stack: Stack,
+    AreaChart: AreaChart,
+    Alert: Alert,
     Comparison: MDXComparison,
+    HoverCard: MDXHoverCard,
 
-    h1: ({ children }) => (
-      <h1
-        data-mdx-heading
-        data-heading={children}
-        data-order={1}
-        id={toSlug(String(children))}
-        style={{
-          scrollMarginTop: '150px',
-          cursor: 'pointer',
-        }}
-        onClick={() => {
-          router.push(`#${toSlug(String(children))}`);
-        }}
-      >
-        {children}
-      </h1>
-    ),
     h2: ({ children }) => (
       <h2
         data-mdx-heading
@@ -111,6 +100,23 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       >
         {children}
       </h2>
+    ),
+    h3: ({ children }) => (
+      <h3
+        data-mdx-heading
+        data-heading={children}
+        data-order={3}
+        id={toSlug(String(children))}
+        style={{
+          scrollMarginTop: '150px',
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          router.push(`#${toSlug(String(children))}`);
+        }}
+      >
+        {children}
+      </h3>
     ),
 
     /**

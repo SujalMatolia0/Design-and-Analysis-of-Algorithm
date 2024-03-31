@@ -32,7 +32,7 @@ export const NavLinks: NavLink[] = [
     group: 'asy-not',
   },
   {
-    label: 'Big - O Notation',
+    label: 'Big - O Notation ✰✰✰',
     href: '/notes/asymptotic-notation/big-o-notation',
     description: 'Introduction to Big - O Notation',
     group: 'asy-not',
@@ -50,7 +50,7 @@ export const NavLinks: NavLink[] = [
     group: 'asy-not',
   },
   {
-    label: 'Little - o Notation',
+    label: 'Little - o Notation ✰',
     href: '/notes/asymptotic-notation/little-o-notation',
     description: 'Introduction to Little - o Notation',
     group: 'asy-not',

@@ -29,7 +29,7 @@ export function TableOfContents() {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const headingsRef = useRef<Heading[]>([]);
 
-  const filteredHeadings = headings.filter((heading) => heading.depth > 0);
+  const filteredHeadings = headings.filter((heading) => heading.depth > 1);
 
   const handleScroll = () => {
     setActive(
@@ -76,7 +76,7 @@ export function TableOfContents() {
               }}
               href={`#${heading.id}`}
               active={active === index}
-              pl={(heading.depth - 1) * 15}
+              pl={(heading.depth - 2) * 15}
               label={heading.content}
             />
           ))
