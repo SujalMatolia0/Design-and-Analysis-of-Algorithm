@@ -145,7 +145,7 @@ export const NavNestedLinks: { category: string; links: NavLink[] }[] = [
     links: getLinksByGroup('time-comp'),
   },
   {
-    category: 'Greedy Algorithm',
+    category: 'Greedy Algorithm ✰✰✰',
     links: getLinksByGroup('greedy'),
   },
 ];

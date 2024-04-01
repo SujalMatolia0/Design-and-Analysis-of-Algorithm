@@ -1,11 +1,761 @@
 # Optimal Merge Pattern
 
-Let $f\scriptsize 1$, $f\scriptsize 2$, $f\scriptsize 3$ are three files whose record
-length are 20, 10, 30 respectfully. This files are arranged in factorial $3 = 6$ ways but marging can
-be done in factorial $\dfrac{3}{2} = \dfrac{6}{2} = 3$ ways.
+In the realm of algorithms, the optimal merge pattern refers to the most efficient way to merge a collection of sorted files into a single, final sorted file. This efficiency is measured by the total time or number of comparisons required for the merging process.
 
-## Problem Objective
+## Why It Matters
 
-Objective of optimal merge pattern is, if there are $n$ files then this files
-can be arranged in factorial $n$ ways ( *Under the general permutation concept* )
-but under the optimal merge pattern concept this files can be merged in factorial $\dfrac{n}{2}$ ways.
+- **Efficiency:** Merging is a fundamental operation in various algorithms, and finding the optimal pattern minimizes the overall execution time.
+- **Real-world Applications:** This concept is particularly relevant in scenarios like merging sorted data from multiple sources, external files, or database tables.
+
+## Understanding the Problem
+
+- **Input:** A set of `n` sorted files, where each file has a specific size.
+- **Goal:** Merge these files into a single sorted file, minimizing the total cost of comparisons or time spent merging.
+
+## Key Points and Strategies
+
+### Greedy Approach
+
+This is the most common and effective method for finding the optimal merge pattern. It involves merging the two smallest files at each step. This strategy minimizes the immediate cost of merging because smaller files require fewer comparisons.
+
+#### Rationale
+
+Selecting the two largest files for initial merging might seem faster initially, but it can lead to larger intermediate files later, increasing the overall cost.
+
+### Implementation with Priority Queue
+
+- A priority queue (min-heap) is a perfect data structure for maintaining the files sorted by size.
+- At each step:
+  - Extract the two files with the smallest sizes from the priority queue.
+  - Merge them into a new sorted file.
+  - Calculate the cost of merging (usually proportional to the sum of their sizes).
+  - Update the cost and add the newly merged file back to the priority queue.
+
+- This process continues until only one file remains in the queue, which is the final sorted output.
+
+## Time Complexity Analysis
+
+- The time complexity using the greedy approach with a priority queue is proven to be O(n log n), where `n` is the total number of files.
+- This complexity arises from the logarithmic operations involved in maintaining the priority queue (inserting/deleting elements).
+
+## Comparison with Other Approaches
+
+- **Naive Approach:** Merging files sequentially, one pair at a time, can lead to suboptimal results.
+- **Optimal Merge Pattern:** Guarantees the minimum total cost for merging in most cases.
+
+## Additional Considerations
+
+- While the optimal merge pattern is provably efficient, the actual cost can vary depending on the specific file sizes and implementation details.
+- In practice, if the difference in file sizes is not significant, simpler merging strategies might be preferable due to constant factors associated with priority queue operations.
+
+## Numericals
+
+### Steps to solve
+
+1. **Identify File Sizes:** The problem statement will usually provide a list of file sizes (`F1`, `F2`, ..., `Fn`) representing the sorted files you need to merge.
+
+2. **Apply Greedy Approach:** 
+
+At each step:
+   - Use a priority queue (min-heap) to efficiently keep track of the files based on their sizes (smaller at the top).
+   - Extract the two files with the smallest sizes (`f1` and `f2`) from the queue.
+   - Calculate the cost of merging them, which is typically the sum of their sizes (`cost = f1 + f2`).
+   - Merge `f1` and `f2` into a new sorted file (`merged_file`).
+   - Update the total cost by adding `cost`.
+   - Add `merged_file` (with its combined size) back to the priority queue.
+
+3. **Repeat Merging:** Continue steps 2(a) to 2(e) until only one file remains in the priority queue. This final file is the merged result.
+
+4. **Calculate Total Cost:** The total cost you accumulated throughout the merging process represents the minimum number of comparisons required for optimal merging.
+
+5. **Verification:** Under the optimal merge pattern concept the total number of record
+movement is.
+
+$$
+\displaystyle\sum_{i=1}^n di \times li
+$$
+
+`di` is distance from root node to that particular ith node
+
+`li` is length of that particular ith node
+
+### Example
+
+<Divider label="1" labelPosition="left" />
+
+#### Problem 
+
+Find the optimal merge pattern and the total cost of merging these files.
+
+- `F1 = 1`
+- `F2 = 2`
+- `F3 = 3`
+- `F4 = 4`
+
+#### Solution
+
+<MerM title={["Detailed", "Brief"]}>
+```mermaid
+flowchart TB
+    subgraph Iteration 1
+        I1F1["F1 (1)"]
+        I1F2["F2 (2)"]
+        I1F3["F3 (3)"]
+        I1F4["F4 (4)"]
+    end
+
+    I1F1-2["F1-2 Merged (3)"]
+
+    I1F1 --> I1F1-2
+    I1F2 --> I1F1-2
+
+    subgraph Iteration 2
+        I2F1-2["F1-2 Merged (3)"]
+        I2F3["F3 (3)"]
+        I2F4["F4 (4)"]
+    end
+
+    I1F1-2 --> I2F1-2
+
+    I2F12-3["F12-3 Merged (6)"]
+
+    I2F1-2 --> I2F12-3
+    I2F3 --> I2F12-3
+
+    subgraph Iteration 3
+        I3F4["F4 (4)"]
+        I3F12-3["F12-3 Merged (6)"]
+    end
+
+    I2F12-3 --> I3F12-3
+
+    I34-123["F4-123 Merged (10)"]
+
+    I3F4 --> I34-123
+    I3F12-3 --> I34-123
+
+    TotalCost["Total Cost (19)"]
+
+    I1F1-2 --> TotalCost
+    I2F12-3 --> TotalCost
+    I34-123 --> TotalCost
+```
+
+```mermaid
+flowchart BT
+
+    subgraph Files
+        F1["F1 (1)"]
+        F2["F2 (2)"]
+        F3["F3 (3)"]
+        F4["F4 (4)"]
+    end
+
+    M1["M1 (3)"]
+
+    F1 --> M1
+    F2 --> M1
+
+    M2["M2 (6)"]
+
+    M1 --> M2
+    F3 --> M2
+
+    M3["M3 (10)"]
+
+    M2 --> M3
+    F4 --> M3
+```
+</MerM>
+
+- Optimal Merge Pattern: `F1-2`, `F12-3`, `F4-123`
+- Optimal Cost: `19`
+- Final Merged File: `M3 (10)`
+
+#### Verification:
+
+- Use `Brief` diagram to count the number of record movements.
+
+- The total number of record movements is calculated as follows:
+
+$$
+(di_{F1} \times li_{F1}) + (di_{F2} \times li_{F2}) + \dotsc = \displaystyle\sum_{i=1}^n di \times li
+$$
+
+$$
+(1 \times 3) + (2 \times 3) + (3 \times 2) + (4 \times 1) = 19
+$$
+
+#### Key Points:
+
+- Remember, the priority queue ensures you always merge the two smallest files first.
+- The total cost calculated during merging represents the optimal cost for this specific set of file sizes.
+
+<Divider label="2" labelPosition="left" />
+
+#### Problem 
+
+You're given six sorted files with the following sizes:
+
+- `F1 = 7`
+- `F2 = 3`
+- `F3 = 2`
+- `F4 = 5`
+- `F5 = 1`
+- `F6 = 4`
+
+Find the optimal merge pattern and the total cost of merging these files.
+
+#### Solution:
+
+<MerM title={["Detailed", "Brief"]}>
+```mermaid
+flowchart TB
+    subgraph Iteration 1
+        I1F5["F5 (1)"]
+        I1F3["F3 (2)"]
+        I1F2["F2 (3)"]
+        I1F6["F6 (4)"]
+        I1F4["F4 (5)"]
+        I1F1["F1 (7)"]
+    end
+
+    I1F3-5["F3-5 Merged (3)"]
+
+    I1F3 --> I1F3-5
+    I1F5 --> I1F3-5
+
+    subgraph Iteration 2
+        I2F3-5["F3-5 Merged (3)"]
+        I2F2["F2 (3)"]
+        I2F6["F6 (4)"]
+        I2F4["F4 (5)"]
+        I2F1["F1 (7)"]
+    end
+
+    I1F3-5 --> I2F3-5
+
+    I2F35-2["F35-2 Merged (6)"]
+
+    I2F3-5 --> I2F35-2
+    I2F2 --> I2F35-2
+
+    subgraph Iteration 3
+        I3F6["F6 (4)"]
+        I3F4["F4 (5)"]
+        I3F35-2["F35-2 Merged (6)"]
+        I3F1["F1 (7)"]
+    end
+
+    I2F35-2 --> I3F35-2
+
+    I3F6-4["F6-4 Merged (9)"]
+
+    I3F6 --> I3F6-4
+    I3F4 --> I3F6-4
+
+    subgraph Iteration 4
+        I4F35-2["F35-2 Merged (6)"]
+        I4F1["F1 (7)"]
+        I4F6-4["F6-4 Merged (9)"]
+    end
+
+    I3F6-4 --> I4F6-4
+
+    I4F352-1["F352-1 Merged (13)"]
+
+    I4F35-2 --> I4F352-1
+    I4F1 --> I4F352-1
+
+    subgraph Iteration 5
+        I5F6-4["F6-4 Merged (9)"]
+        I5F352-1["F352-1 Merged (13)"]
+    end
+
+    I4F352-1 --> I5F352-1
+
+    I564-3521["F64-3521 Merged (22)"]
+
+    I5F6-4 --> I564-3521
+    I5F352-1 --> I564-3521
+
+    TotalCost["Total Cost (53)"]
+
+    I1F3-5 --> TotalCost
+    I2F35-2 --> TotalCost
+    I3F6-4 --> TotalCost
+    I4F352-1 --> TotalCost
+    I564-3521 --> TotalCost
+```
+
+```mermaid
+flowchart TB
+    subgraph Files
+        F5["F5 (1)"]
+        F3["F3 (2)"]
+        F2["F2 (3)"]
+        F6["F6 (4)"]
+        F4["F4 (5)"]
+        F1["F1 (7)"]
+    end
+
+    M1["M1 (3)"]
+
+    F3 --> M1
+    F5 --> M1
+
+    M2["M2 (6)"]
+
+    M1 --> M2
+    F2 --> M2
+
+    M3["M3 (9)"]
+
+    F6 --> M3
+    F4 --> M3
+
+    M4["M4 (13)"]
+
+    M2 --> M4
+    F1 --> M4
+
+    M5["M5 (22)"]
+
+    M3 --> M5
+    M4 --> M5
+```
+</MerM>
+
+- Optimal Merge Pattern: `F3-5`, `F35-2`, `F6-4`, `F352-1`, `F64-3521`
+- Optimal Cost: `53`
+- Final Merged File: `M5 (22)`
+
+#### Verification:
+
+- Use `Brief` diagram to count the number of record movements.
+
+- The total number of record movements is calculated as follows:
+
+$$
+(4 \times 2) + (5 \times 2) + (2 \times 4) + (1 \times 4) + (3 \times 3) + (7 \times 2) = 53
+$$
+
+<Divider label="3" labelPosition="left" />
+
+#### Problem
+
+You have four sorted files, all with the same size of `10` units each. Find the optimal merge pattern and total cost.
+
+#### Solution
+
+<MerM title={["Detailed", "Brief"]}>
+```mermaid
+flowchart TB
+    subgraph Iteration 1
+        I1F1["F1 (10)"]
+        I1F2["F2 (10)"]
+        I1F3["F3 (10)"]
+        I1F4["F4 (10)"]
+    end
+
+     I1F1-2["F1-2 Merged (20)"]
+
+     I1F1 --> I1F1-2
+    I1F2 --> I1F1-2
+
+     subgraph Iteration 2
+        I2F3["F3 (10)"]
+        I2F4["F4 (10)"]
+        I2F1-2["F1-2 Merged (20)"]
+    end
+
+     I1F1-2 --> I2F1-2
+
+     I2F3-4["F3-4 Merged (20)"]
+
+     I2F3 --> I2F3-4
+    I2F4 --> I2F3-4
+
+     subgraph Iteration 3
+        I3F1-2["F1-2 Merged (20)"]
+        I3F3-4["F3-4 Merged (20)"]
+    end
+
+     I2F3-4 --> I3F3-4
+
+     I312-34["F12-34 Merged (40)"]
+
+     I3F1-2 --> I312-34
+    I3F3-4 --> I312-34
+
+     TotalCost["Total Cost (80)"]
+
+     I1F1-2 --> TotalCost
+    I2F3-4 --> TotalCost
+    I312-34 --> TotalCost
+
+```
+
+```mermaid
+    flowchart TB
+        subgraph Files
+            F1["F1 (10)"]
+            F2["F2 (10)"]
+            F3["F3 (10)"]
+            F4["F4 (10)"]
+        end
+
+        M1["M1 (20)"]
+
+        F1 --> M1
+        F2 --> M1
+
+        M2["M2 (20)"]
+
+        F3 --> M2
+        F4 --> M2
+
+        M3["M3 (40)"]
+
+        M1 --> M3
+        M2 --> M3
+```
+</MerM>
+
+- Optimal Merge Pattern: `F1-2`, `F3-4`, `F12-34`
+- Optimal Cost: `80`
+- Final Merged File: `M3 (40)`
+
+#### Verification:
+
+- Use `Brief` diagram to count the number of record movements.
+
+- The total number of record movements is calculated as follows:
+
+$$
+(10 \times 2) + (10 \times 2) + (10 \times 2) + (10 \times 2) = 80
+$$
+
+#### Key Observation
+
+- Even though all files have the same size, the optimal merge pattern still involves merging the smallest files first to minimize the total cost.
+
+<Divider label="4" labelPosition="left" />
+
+#### Problem
+
+You're given five sorted files with the following sizes:
+
+- `F1 = 2`
+- `F2 = 3`
+- `F3 = 4`
+- `F4 = 5`
+- `F5 = 8`
+
+Find the optimal merge pattern and the total cost of merging these files.
+
+#### Solution
+
+<MerM title={["Detailed", "Brief"]}>
+```mermaid
+flowchart TB
+
+    subgraph Iteration 1
+        I1F1["F1 (2)"]
+        I1F2["F2 (3)"]
+        I1F3["F3 (4)"]
+        I1F4["F4 (5)"]
+        I1F5["F5 (8)"]
+    end
+
+    I1F1-2["F1-2 Merged (5)"]
+
+    I1F1 --> I1F1-2
+    I1F2 --> I1F1-2
+
+    subgraph Iteration 2
+        I2F3["F3 (4)"]
+        I2F4["F4 (5)"]
+        I2F1-2["F1-2 Merged (5)"]
+        I2F5["F5 (8)"]
+    end
+
+    I1F1-2 --> I2F1-2
+
+    I2F3-4["F3-4 Merged (9)"]
+
+    I2F3 --> I2F3-4
+    I2F4 --> I2F3-4
+
+    subgraph Iteration 3
+        I3F1-2["F1-2 Merged (5)"]
+        I3F5["F5 (8)"]
+        I3F3-4["F3-4 Merged (9)"]
+    end
+
+    I2F3-4 --> I3F3-4
+
+    I3F12-5["F12-5 Merged (13)"]
+
+    I3F1-2 --> I3F12-5
+    I3F5 --> I3F12-5
+
+    subgraph Iteration 4
+        I4F3-4["F3-4 Merged (9)"]
+        I4F12-5["F12-5 Merged (13)"]
+    end
+
+    I3F12-5 --> I4F12-5
+
+    I4F34-125["F34-125 Merged (22)"]
+
+    I4F3-4 --> I4F34-125
+    I4F12-5 --> I4F34-125
+
+    TotalCost["Total Cost (49)"]
+
+    I1F1-2 --> TotalCost
+    I2F3-4 --> TotalCost
+    I3F12-5 --> TotalCost
+    I4F34-125 --> TotalCost
+```
+
+```mermaid
+flowchart TB
+    subgraph Files
+        F1["F1 (2)"]
+        F2["F2 (3)"]
+        F3["F3 (4)"]
+        F4["F4 (5)"]
+        F5["F5 (8)"]
+    end
+
+    M1["M1 (5)"]
+
+    F1 --> M1
+    F2 --> M1
+
+    M2["M2 (9)"]
+
+    F3 --> M2
+    F4 --> M2
+
+    M3["M3 (13)"]
+
+    M1 --> M3
+    F5 --> M3
+
+    M4["M4 (22)"]
+
+    M2 --> M4
+    M3 --> M4
+```
+</MerM>
+
+- Optimal Merge Pattern: `F1-2`, `F3-4`, `F12-5`, `F34-125`
+- Optimal Cost: `49`
+- Final Merged File: `M4 (22)`
+
+#### Verification:
+
+- Use `Brief` diagram to count the number of record movements.
+
+- The total number of record movements is calculated as follows:
+
+$$
+(4 \times 2) + (5 \times 2) + (2 \times 3) + (3 \times 3) + (8 \times 2) = 49
+$$
+
+<Divider label="5" labelPosition="left" />
+
+#### Problem
+
+You have three sorted files with the following sizes:
+
+- `F1 = 4`
+- `F2 = 8`
+- `F3 = 15`
+- `F4 = 3`
+- `F5 = 7`
+- `F6 = 9`
+- `F7 = 10`
+
+Find the optimal merge pattern and the total cost of merging these files.
+
+#### Solution
+
+<MerM title={["Detailed", "Brief"]}>
+```mermaid
+    flowchart TB
+        subgraph Iteration 1
+            I1F4["F4 (3)"]
+            I1F1["F1 (4)"]
+            I1F5["F5 (7)"]
+            I1F2["F2 (8)"]
+            I1F6["F6 (9)"]
+            I1F7["F7 (10)"]
+            I1F3["F3 (15)"]
+        end
+
+        I1F4-1["F4-1 Merged (7)"]
+
+        I1F4 --> I1F4-1
+        I1F1 --> I1F4-1
+
+        subgraph Iteration 2
+            I2F4-1["F4-1 Merged (7)"]
+            I2F5["F5 (7)"]
+            I2F2["F2 (8)"]
+            I2F6["F6 (9)"]
+            I2F7["F7 (10)"]
+            I2F3["F3 (15)"]
+        end
+
+        I1F4-1 --> I2F4-1
+
+        I2F41-5["F41-5 Merged (14)"]
+
+        I2F4-1 --> I2F41-5
+        I2F5 --> I2F41-5
+
+        subgraph Iteration 3
+            I3F2["F2 (8)"]
+            I3F6["F6 (9)"]
+            I3F7["F7 (10)"]
+            I3F41-5["F41-5 Merged (14)"]
+            I3F3["F3 (15)"]
+        end
+
+        I2F41-5 --> I3F41-5
+
+        I3F2-6["F2-6 Merged (17)"]
+
+        I3F2 --> I3F2-6
+        I3F6 --> I3F2-6
+
+        subgraph Iteration 4
+            I4F7["F7 (10)"]
+            I4F41-5["F41-5 Merged (14)"]
+            I4F3["F3 (15)"]
+            I4F2-6["F2-6 Merged (17)"]
+        end
+
+        I3F2-6 --> I4F2-6
+
+        I4F7-415["F7-415 Merged (24)"]
+
+        I4F7 --> I4F7-415
+        I4F41-5 --> I4F7-415
+
+        subgraph Iteration 5
+            I5F3["F3 (15)"]
+            I5F2-6["F2-6 Merged (17)"]
+            I5F7-415["F7-415 Merged (24)"]
+        end
+
+        I4F7-415 --> I5F7-415
+
+        I5F3-26["F3-26 Merged (32)"]
+
+        I5F3 --> I5F3-26
+        I5F2-6 --> I5F3-26
+
+        subgraph Iteration 6
+            I6F7-415["F7-415 Merged (24)"]
+            I6F3-26["F3-26 Merged (32)"]
+        end
+
+        I5F3-26 --> I6F3-26
+
+        I6F7415-326["F7415-326 Merged (56)"]
+
+        I6F7-415 --> I6F7415-326
+
+        TotalCost["Total Cost (150)"]
+
+        I1F4-1 --> TotalCost
+        I2F41-5 --> TotalCost
+        I3F2-6 --> TotalCost
+        I4F7-415 --> TotalCost
+        I5F3-26 --> TotalCost
+        I6F7415-326 --> TotalCost
+```
+
+```mermaid
+    flowchart TB
+        subgraph Files
+            F4["F4 (3)"]
+            F1["F1 (4)"]
+            F5["F5 (7)"]
+            F2["F2 (8)"]
+            F6["F6 (9)"]
+            F7["F7 (10)"]
+            F3["F3 (15)"]
+        end
+
+        M1["M1 (7)"]
+
+        F4 --> M1
+        F1 --> M1
+
+        M2["M2 (14)"]
+
+        M1 --> M2
+        F5 --> M2
+
+        M3["M3 (17)"]
+
+        F2 --> M3
+        F6 --> M3
+
+        M4["M4 (24)"]
+
+        F7 --> M4
+        M2 --> M4
+
+        M5["M5 (32)"]
+
+        F3 --> M5
+        M3 --> M5
+
+        M6["M6 (56)"]
+
+        M4 --> M6
+        M5 --> M6
+```
+</MerM>
+
+- Optimal Merge Pattern: `F4-1`, `F41-5`, `F2-6`, `F7-415`, `F3-26`, `F7415-326`
+- Optimal Cost: `150`
+- Final Merged File: `M6 (56)`
+
+#### Verification:
+
+- Use `Brief` diagram to count the number of record movements.
+
+- The total number of record movements is calculated as follows:
+
+$$
+(3 \times 4) + (4 \times 4) + (7 \times 3) + (8 \times 3) + \\ (9 \times 2) + (10 \times 2) + (15 \times 1) = 150
+$$
+
+## Questions
+
+<Cola title="Describe an efficient way to merge k sorted files into a single sorted file in a distributed computing environment.">
+The optimal merge pattern refers to the most efficient way to merge multiple sorted files into a single sorted file. It's about minimizing the total number of comparisons or operations needed during the merging process.
+
+Here's the key idea:
+
+* We can merge sorted files in pairs. Each pair-wise merge takes time proportional to the total size of the two files being merged.
+* But, the order in which we choose these pairs can significantly impact the overall efficiency.
+
+The optimal merge pattern aims to strategically select these pairs to minimize the total merging time. It achieves this by prioritizing merging the smallest files first.
+
+There are two main approaches to find the optimal merge pattern:
+
+1. **Greedy Method:** This method repeatedly identifies the two smallest files (based on size) from the remaining ones and merges them. The resulting merged file is then added back to the pool for further merging. This process continues until only one file remains, which is the final sorted output.
+
+2. **Using a Binary Merge Tree:** We can construct a binary tree where each leaf node represents a sorted file and its size. The weight of each internal node represents the total size of the files in its subtree (which essentially reflects the merging cost). The optimal pattern corresponds to a binary merge tree with the minimum total weight across all internal nodes.
+
+By following the optimal merge pattern, we can significantly reduce the number of comparisons needed during the merging process compared to a random or non-strategic approach. This translates to faster sorting of the combined data.
+</Cola>

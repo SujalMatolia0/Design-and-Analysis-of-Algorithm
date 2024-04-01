@@ -3,9 +3,10 @@ import { toSlug } from './lib/helpers/toSlug';
 import { useRouter } from 'next/router';
 import { CodeHighlight, CodeHighlightTabs } from '@mantine/code-highlight';
 import { Children, useMemo, useState } from 'react';
-import { Mermaid } from './components/mermaid';
+import { Mermaid, MermaidProps } from './components/mermaid';
 import { z } from 'zod';
 import {
+  Accordion,
   Alert,
   Anchor,
   Badge,
@@ -29,6 +30,8 @@ import { MDXErrorBlock } from './components/mdx/error-block';
 import { MDXComparison } from './components/mdx/comparison';
 import { AreaChart } from '@mantine/charts';
 import { MDXHoverCard } from './components/mdx/hover-card';
+import { MDXTab } from './components/mdx/tabs';
+import { MDXMermaidMultiple } from './components/mdx/mermaid-multiple';
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -85,6 +88,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     Divider: Divider,
     Comparison: MDXComparison,
     HoverCard: MDXHoverCard,
+    Tab: MDXTab,
+    MerM: MDXMermaidMultiple,
 
     h2: ({ children }) => (
       <h2
@@ -157,7 +162,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     /**
      * Single mermaid
      */
-    Mer: ({ children }: { children: React.ReactNode }) => {
+    Mer: ({
+      children,
+      wrapper,
+    }: {
+      children: React.ReactNode;
+      wrapper: MermaidProps['wrapper'];
+    }) => {
       const parseResult = useMemo(() => {
         return codeBlockSchema.safeParse(children);
       }, [children]);
@@ -188,7 +199,10 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       return (
         <>
-          <Mermaid chart={parseResult.data.props.children.props.children} />
+          <Mermaid
+            chart={parseResult.data.props.children.props.children}
+            wrapper={wrapper}
+          />
         </>
       );
     },
@@ -299,8 +313,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       children: React.ReactNode;
       title: string;
     }) => {
-      const [Open, setOpen] = useState(false);
-
       if (!title) {
         return (
           <MDXErrorBlock
@@ -313,39 +325,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       }
 
       return (
-        <Paper withBorder>
-          <Card
-            py="md"
-            px="xl"
-            style={{
-              cursor: 'pointer',
-
-              borderBottomLeftRadius: Open ? 0 : 'var(--mantine-radius-md)',
-              borderBottomRightRadius: Open ? 0 : 'var(--mantine-radius-md)',
-
-              borderBottom: !Open
-                ? 'none'
-                : `1px solid var(--mantine-color-${
-                    colorScheme === 'light' ? 'gray-3' : 'dark-4'
-                  })`,
-            }}
-            onClick={() => setOpen(!Open)}
-          >
-            <Group justify="space-between">
-              {title}
-
-              {Open ? (
-                <IconChevronUp size={ICON_SIZE.SM} />
-              ) : (
-                <IconChevronDown size={ICON_SIZE.SM} />
-              )}
-            </Group>
-          </Card>
-
-          <Collapse in={Open} p="xl">
-            <Stack>{children}</Stack>
-          </Collapse>
-        </Paper>
+        <>
+          <Accordion variant="contained">
+            <Accordion.Item value={title} key={title}>
+              <Accordion.Control>{title}</Accordion.Control>
+              <Accordion.Panel px="xl" py="xs">
+                <Stack>{children}</Stack>
+              </Accordion.Panel>
+            </Accordion.Item>
+          </Accordion>
+        </>
       );
     },
 
