@@ -1,19 +1,19 @@
+import dynamic from 'next/dynamic';
+import { CenterLoading } from './components/indie/center-loading';
+
 import type { MDXComponents } from 'mdx/types';
 import { toSlug } from './lib/helpers/toSlug';
 import { useRouter } from 'next/router';
-import { CodeHighlight, CodeHighlightTabs } from '@mantine/code-highlight';
-import { Children, useMemo, useState } from 'react';
-import { Mermaid, MermaidProps } from './components/mermaid';
+import { Children, useMemo } from 'react';
 import { z } from 'zod';
+import { type MermaidProps } from './components/mermaid';
 import {
   Accordion,
   Alert,
   Anchor,
   Badge,
-  Card,
   Center,
   Code,
-  Collapse,
   Divider,
   Grid,
   Group,
@@ -24,19 +24,81 @@ import {
   alpha,
   useMantineColorScheme,
 } from '@mantine/core';
-import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
-import { ICON_SIZE } from './lib/const';
-import { MDXErrorBlock } from './components/mdx/error-block';
-import { MDXComparison } from './components/mdx/comparison';
-import { AreaChart } from '@mantine/charts';
-import { MDXHoverCard } from './components/mdx/hover-card';
-import { MDXTab } from './components/mdx/tabs';
-import { MDXMermaidMultiple } from './components/mdx/mermaid-multiple';
 
-// This file allows you to provide custom React components
-// to be used in MDX files. You can import and use any
-// React component you want, including inline styles,
-// components from other libraries, and more.
+const Mermaid = dynamic(
+  () => import('./components/mermaid').then((mod) => mod.Mermaid),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const CodeHighlightTabs = dynamic(
+  () => import('@mantine/code-highlight').then((mod) => mod.CodeHighlightTabs),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const CodeHighlight = dynamic(
+  () => import('@mantine/code-highlight').then((mod) => mod.CodeHighlight),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const MDXErrorBlock = dynamic(
+  () => import('./components/mdx/error-block').then((mod) => mod.MDXErrorBlock),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const MDXComparison = dynamic(
+  () => import('./components/mdx/comparison').then((mod) => mod.MDXComparison),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const AreaChart = dynamic(
+  () => import('@mantine/charts').then((mod) => mod.AreaChart),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const MDXHoverCard = dynamic(
+  () => import('./components/mdx/hover-card').then((mod) => mod.MDXHoverCard),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const MDXTab = dynamic(
+  () => import('./components/mdx/tabs').then((mod) => mod.MDXTab),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const MDXMermaidMultiple = dynamic(
+  () =>
+    import('./components/mdx/mermaid-multiple').then(
+      (mod) => mod.MDXMermaidMultiple
+    ),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
 
 const codeBlockSchema = z.object({
   type: z.literal('pre'),
