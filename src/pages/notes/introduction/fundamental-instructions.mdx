@@ -1,0 +1,45 @@
+# Characteristics of Fundamental Instructions
+
+## Definiteness
+
+Every fundamental instruction must be define
+without any ambiguity ( *no confusion* ).
+
+**Example**
+
+Shows Ambiguity
+
+<CodeS>
+```py
+c = 2 t 2
+```
+</CodeS>
+
+Shows Unambiguity
+
+<CodeS>
+```py
+c = 2 + 2
+```
+</CodeS>
+
+## Finiteness
+
+Every fundamental instruction must be terminated
+with a finite amount of time.
+
+**Example**
+
+<CodeS>
+```py
+# Infinite loop
+x = 2
+while x > 1:
+    x = x + 1 # This instruction will never terminate
+```
+</CodeS>
+
+
+## Input ✰
+
+Every fundamental instruction accepts at least 0  as ( *atleast it take 1 input like wise 0* ) a input and provides at least 1 output.

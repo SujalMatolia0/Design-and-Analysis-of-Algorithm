@@ -1,29 +1,104 @@
+import dynamic from 'next/dynamic';
+import { CenterLoading } from './components/indie/center-loading';
+
 import type { MDXComponents } from 'mdx/types';
 import { toSlug } from './lib/helpers/toSlug';
 import { useRouter } from 'next/router';
-import { CodeHighlight, CodeHighlightTabs } from '@mantine/code-highlight';
-import { Children, useMemo, useState } from 'react';
-import { Mermaid } from './components/mermaid';
+import { Children, useMemo } from 'react';
 import { z } from 'zod';
+import { type MermaidProps } from './components/mermaid';
 import {
+  Accordion,
+  Alert,
   Anchor,
-  Box,
-  Card,
+  Badge,
+  Center,
   Code,
-  Collapse,
+  Divider,
+  Grid,
   Group,
   Paper,
+  SimpleGrid,
   Stack,
+  Text,
   alpha,
   useMantineColorScheme,
 } from '@mantine/core';
-import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
-import { ICON_SIZE } from './lib/const';
 
-// This file allows you to provide custom React components
-// to be used in MDX files. You can import and use any
-// React component you want, including inline styles,
-// components from other libraries, and more.
+const Mermaid = dynamic(
+  () => import('./components/mermaid').then((mod) => mod.Mermaid),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const CodeHighlightTabs = dynamic(
+  () => import('@mantine/code-highlight').then((mod) => mod.CodeHighlightTabs),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const CodeHighlight = dynamic(
+  () => import('@mantine/code-highlight').then((mod) => mod.CodeHighlight),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const MDXErrorBlock = dynamic(
+  () => import('./components/mdx/error-block').then((mod) => mod.MDXErrorBlock),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const MDXComparison = dynamic(
+  () => import('./components/mdx/comparison').then((mod) => mod.MDXComparison),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const AreaChart = dynamic(
+  () => import('@mantine/charts').then((mod) => mod.AreaChart),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const MDXHoverCard = dynamic(
+  () => import('./components/mdx/hover-card').then((mod) => mod.MDXHoverCard),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const MDXTab = dynamic(
+  () => import('./components/mdx/tabs').then((mod) => mod.MDXTab),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
+
+const MDXMermaidMultiple = dynamic(
+  () =>
+    import('./components/mdx/mermaid-multiple').then(
+      (mod) => mod.MDXMermaidMultiple
+    ),
+  {
+    ssr: false,
+    loading: () => <CenterLoading height="50px" />,
+  }
+);
 
 const codeBlockSchema = z.object({
   type: z.literal('pre'),
@@ -55,11 +130,7 @@ const codeBlockSchema = z.object({
 
 const codeBlockArraySchema = z.array(codeBlockSchema).min(1);
 
-const ErrBlock = ({ error }: { error: object }) => {
-  return (
-    <CodeHighlight language="json" code={JSON.stringify(error, null, 2)} />
-  );
-};
+const Alphabet = '#ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   const router = useRouter();
@@ -67,23 +138,21 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   const { colorScheme } = useMantineColorScheme();
 
   return {
-    h1: ({ children }) => (
-      <h1
-        data-mdx-heading
-        data-heading={children}
-        data-order={1}
-        id={toSlug(String(children))}
-        style={{
-          scrollMarginTop: '150px',
-          cursor: 'pointer',
-        }}
-        onClick={() => {
-          router.push(`#${toSlug(String(children))}`);
-        }}
-      >
-        {children}
-      </h1>
-    ),
+    SimpleGrid: SimpleGrid,
+    Group: Group,
+    Text: Text,
+    Center: Center,
+    Grid: Grid,
+    Paper: Paper,
+    Stack: Stack,
+    AreaChart: AreaChart,
+    Alert: Alert,
+    Divider: Divider,
+    Comparison: MDXComparison,
+    HoverCard: MDXHoverCard,
+    Tab: MDXTab,
+    MerM: MDXMermaidMultiple,
+
     h2: ({ children }) => (
       <h2
         data-mdx-heading
@@ -101,6 +170,23 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </h2>
     ),
+    h3: ({ children }) => (
+      <h3
+        data-mdx-heading
+        data-heading={children}
+        data-order={3}
+        id={toSlug(String(children))}
+        style={{
+          scrollMarginTop: '150px',
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          router.push(`#${toSlug(String(children))}`);
+        }}
+      >
+        {children}
+      </h3>
+    ),
 
     /**
      * Single code black
@@ -112,7 +198,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!parseResult.success) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Invalid code block',
               component: 'CodeS',
@@ -138,14 +224,20 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     /**
      * Single mermaid
      */
-    Mer: ({ children }: { children: React.ReactNode }) => {
+    Mer: ({
+      children,
+      wrapper,
+    }: {
+      children: React.ReactNode;
+      wrapper: MermaidProps['wrapper'];
+    }) => {
       const parseResult = useMemo(() => {
         return codeBlockSchema.safeParse(children);
       }, [children]);
 
       if (!parseResult.success) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Invalid code block',
               component: 'Mer',
@@ -158,7 +250,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       // language should be mermaid
       if (parseResult.data.props.children.props.className !== 'mermaid') {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Invalid language, it should be mermaid',
               language: parseResult.data.props.children.props.className,
@@ -169,7 +261,10 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       return (
         <>
-          <Mermaid chart={parseResult.data.props.children.props.children} />
+          <Mermaid
+            chart={parseResult.data.props.children.props.children}
+            wrapper={wrapper}
+          />
         </>
       );
     },
@@ -194,7 +289,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!parseResult.success) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Invalid code block',
               component: 'CodeM',
@@ -206,7 +301,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!fileNames || fileNames.length === 0) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'File names are missing',
               component: 'CodeM',
@@ -217,7 +312,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (parseResult.data?.length !== fileNames.length) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Code blocks and file names count mismatch',
               codeBlocksCount: parseResult.data.length,
@@ -280,11 +375,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       children: React.ReactNode;
       title: string;
     }) => {
-      const [Open, setOpen] = useState(false);
-
       if (!title) {
         return (
-          <ErrBlock
+          <MDXErrorBlock
             error={{
               message: 'Title is missing',
               component: 'Cola',
@@ -294,39 +387,77 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       }
 
       return (
-        <Paper withBorder>
-          <Card
-            py="md"
-            px="xl"
-            style={{
-              cursor: 'pointer',
+        <>
+          <Accordion variant="contained">
+            <Accordion.Item value={title} key={title}>
+              <Accordion.Control>{title}</Accordion.Control>
+              <Accordion.Panel px="xl" py="xs">
+                <Stack>{children}</Stack>
+              </Accordion.Panel>
+            </Accordion.Item>
+          </Accordion>
+        </>
+      );
+    },
 
-              borderBottomLeftRadius: Open ? 0 : 'var(--mantine-radius-md)',
-              borderBottomRightRadius: Open ? 0 : 'var(--mantine-radius-md)',
-
-              borderBottom: !Open
-                ? 'none'
-                : `1px solid var(--mantine-color-${
-                    colorScheme === 'light' ? 'gray-3' : 'dark-4'
-                  })`,
+    Tag: ({ data }: { data: string[] }) => {
+      if (!data || data.length === 0) {
+        return (
+          <MDXErrorBlock
+            error={{
+              message: 'Data is missing',
+              component: 'Tag',
             }}
-            onClick={() => setOpen(!Open)}
-          >
-            <Group justify="space-between">
-              {title}
+          />
+        );
+      }
 
-              {Open ? (
-                <IconChevronUp size={ICON_SIZE.SM} />
-              ) : (
-                <IconChevronDown size={ICON_SIZE.SM} />
-              )}
-            </Group>
-          </Card>
+      return (
+        <Group>
+          {Children.toArray(data).map((item) => (
+            <>
+              <Badge>{item}</Badge>
+            </>
+          ))}
+        </Group>
+      );
+    },
 
-          <Collapse in={Open} p="xl">
-            <Stack>{children}</Stack>
-          </Collapse>
-        </Paper>
+    ChessBoard: ({ data }: { data: string[][] }) => {
+      return (
+        <Stack>
+          {Children.toArray(
+            data.map((item, index) => (
+              <SimpleGrid cols={item.length + 1}>
+                <Center h="100%">
+                  <Text ta="center" fw="bold">
+                    {index + 1}
+                  </Text>
+                </Center>
+
+                {item.map((subItem) => (
+                  <>
+                    <Paper withBorder radius={0} h={45} px={5}>
+                      <Center h="100%">
+                        <Text fw="bold">{subItem}</Text>
+                      </Center>
+                    </Paper>
+                  </>
+                ))}
+              </SimpleGrid>
+            ))
+          )}
+
+          <SimpleGrid cols={data[0].length + 1}>
+            {Children.toArray(
+              Array.from({ length: data[0].length + 1 }).map((_, index) => (
+                <Text ta="center" fw="bold">
+                  {Alphabet[index]}
+                </Text>
+              ))
+            )}
+          </SimpleGrid>
+        </Stack>
       );
     },
 

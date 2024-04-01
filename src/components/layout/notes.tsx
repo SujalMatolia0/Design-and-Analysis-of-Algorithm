@@ -6,10 +6,13 @@ import {
   Box,
   Burger,
   Button,
+  Center,
   Container,
   Divider,
   Group,
   NavLink,
+  ScrollArea,
+  Space,
   Stack,
   Text,
   Title,
@@ -46,9 +49,10 @@ export const NotesLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       <Spotlight
         actions={spotlightActions}
-        nothingFound="Nothing found..."
+        nothingFound="Don't give up! Keep exploring."
+        limit={7}
         searchProps={{
-          placeholder: 'Search...',
+          placeholder: "Find what you're looking for.",
         }}
       />
       <AppShell
@@ -134,37 +138,41 @@ export const NotesLayout = ({ children }: { children: React.ReactNode }) => {
             </Group>
           </Group>
         </AppShell.Header>
-        <AppShell.Navbar p="md" zIndex={1000}>
-          <Stack mt="lg" gap="xs">
-            {Children.toArray(
-              NavNestedLinks.map((link) => (
-                <>
-                  <Title pl="lg" order={4}>
-                    {link.category}
-                  </Title>
-                  <Stack gap={5}>
-                    {Children.toArray(
-                      link.links.map((nestedLink) => (
-                        <NavLink
-                          style={{
-                            borderRadius: 'var(--mantine-radius-md)',
-                          }}
-                          href={nestedLink.href}
-                          label={nestedLink.label}
-                          active={router.pathname === nestedLink.href}
-                          pl="lg"
-                          onClick={toggle}
-                        />
-                      ))
-                    )}
-                  </Stack>
-                </>
-              ))
-            )}
-          </Stack>
+        <AppShell.Navbar zIndex={1000}>
+          <ScrollArea.Autosize type="never">
+            <Stack mt="lg" gap="xs" p="md">
+              {Children.toArray(
+                NavNestedLinks.map((link) => (
+                  <>
+                    <Title pl="lg" order={4}>
+                      {link.category}
+                    </Title>
+                    <Stack gap={5}>
+                      {Children.toArray(
+                        link.links.map((nestedLink) => (
+                          <NavLink
+                            style={{
+                              borderRadius: 'var(--mantine-radius-md)',
+                            }}
+                            href={nestedLink.href}
+                            label={nestedLink.label}
+                            active={router.pathname === nestedLink.href}
+                            pl="lg"
+                            onClick={toggle}
+                          />
+                        ))
+                      )}
+                    </Stack>
+                  </>
+                ))
+              )}
+            </Stack>
+          </ScrollArea.Autosize>
         </AppShell.Navbar>
-        <AppShell.Aside withBorder={false} p="md">
-          <TableOfContents />
+        <AppShell.Aside withBorder={false}>
+          <ScrollArea.Autosize type="never">
+            <TableOfContents />
+          </ScrollArea.Autosize>
         </AppShell.Aside>
         <AppShell.Main>
           <Container>
@@ -186,6 +194,15 @@ export const NotesLayout = ({ children }: { children: React.ReactNode }) => {
                   Edit this page on GitHub
                 </Button>
               </Group>
+
+              <Center h="calc(100vh - 80px)">
+                <Text fw="bold" ta="center" maw={350}>
+                  Hey Human Being.
+                  <br />
+                  <br />
+                  You are at the end of the page.
+                </Text>
+              </Center>
             </Stack>
           </Container>
         </AppShell.Main>

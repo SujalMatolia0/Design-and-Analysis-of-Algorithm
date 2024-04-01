@@ -1,12 +1,5 @@
 import React, { Children, useEffect, useRef, useState } from 'react';
-
-import {
-  NavLink,
-  Stack,
-  Text,
-  Title,
-  useMantineColorScheme,
-} from '@mantine/core';
+import { NavLink, Stack, Title } from '@mantine/core';
 import { Heading, getHeadings } from '../../lib/helpers/getHeadings';
 
 function getActiveElement(rects: DOMRect[]) {
@@ -36,9 +29,7 @@ export function TableOfContents() {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const headingsRef = useRef<Heading[]>([]);
 
-  const { colorScheme } = useMantineColorScheme();
-
-  const filteredHeadings = headings.filter((heading) => heading.depth > 0);
+  const filteredHeadings = headings.filter((heading) => heading.depth > 1);
 
   const handleScroll = () => {
     setActive(
@@ -71,7 +62,7 @@ export function TableOfContents() {
   }
 
   return (
-    <Stack mt="lg" gap="xs">
+    <Stack mt="lg" gap="xs" p="md">
       <Title order={4}>Table of contents</Title>
 
       <Stack gap={0}>
@@ -85,7 +76,7 @@ export function TableOfContents() {
               }}
               href={`#${heading.id}`}
               active={active === index}
-              pl={(heading.depth - 1) * 15}
+              pl={(heading.depth - 2) * 15}
               label={heading.content}
             />
           ))

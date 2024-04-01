@@ -1,0 +1,169 @@
+# Solution of Four Queen's Problem
+
+Using **Backtracking** algorithm to solve the problem.
+
+The 4 Queens Problem is a problem of placing 4 queens on a 4x4 chessboard so that no two queens attack each other.
+
+No two queens can be in the same row, column, or diagonal.
+
+## Step 1
+
+Initialize a 4x4 chessboard with empty cells.
+
+<br/>
+
+<ChessBoard data={[
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""]
+]} />
+
+<br/>
+
+## Step 2
+
+Put First Queen ( *Q1* ) in the ( *1*, *A* ) cell.
+
+<br/>
+
+<ChessBoard data={[
+    ["Q1", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""]
+]} />
+
+<br/>
+
+## Step 3
+
+Put second queen ( *Q2* ) in the ( *2*, *C* ) cell.
+
+<br/>
+
+<ChessBoard data={[
+    ["Q1", "", "", ""],
+    ["", "", "Q2", ""],
+    ["", "", "", ""],
+    ["", "", "", ""]
+]} />
+
+<br/>
+
+## Step 4
+
+There is no cell available for the third queen ( *Q3* ) to place in the same row, column, or diagonal of the first two queens.
+
+<br/>
+
+<ChessBoard data={[
+    ["Q1", "", "", ""],
+    ["", "", "Q2", ""],
+    ["-", "-", "-", "-"],
+    ["", "", "", ""]
+]} />
+
+<br/>
+
+## Step 5
+
+So, we need to backtrack and move the second queen ( *Q2* ) to the next cell.
+
+<br/>
+
+<ChessBoard data={[
+    ["Q1", "", "", ""],
+    ["", "", "", "Q2"],
+    ["", "", "", ""],
+    ["", "", "", ""]
+]} />
+
+<br/>
+
+## Step 6
+
+Put the third queen ( *Q3* ) in the ( *3*, *B* ) cell.
+
+<br/>
+
+<ChessBoard data={[
+    ["Q1", "", "", ""],
+    ["", "", "", "Q2"],
+    ["", "Q3", "", ""],
+    ["", "", "", ""]
+]} />
+
+<br/>
+
+## Step 7
+
+There is no cell available for the fourth queen ( *Q4* ) to place in the same row, column, or diagonal of the first three queens.
+
+Backtrack and move the third queen ( *Q3* ) to the next cell.
+
+Again there is no cell available for the third queen ( *Q3* ) to place.
+
+Backtrack and remove the second queen ( *Q2* ).
+
+First Queen will move to the next cell ( *1*, *B* ).
+
+<br/>
+
+<ChessBoard data={[
+    ["", "Q1", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""]
+]} />
+
+<br/>
+
+## Step 8
+
+Put the second queen ( *Q2* ) in the ( *2*, *D* ) cell.
+
+<br/>
+
+<ChessBoard data={[
+    ["", "Q1", "", ""],
+    ["", "", "", "Q2"],
+    ["", "", "", ""],
+    ["", "", "", ""]
+]} />
+
+<br/>
+
+## Step 9
+
+Put the third queen ( *Q3* ) in the ( *3*, *A* ) cell.
+
+<br/>
+
+<ChessBoard data={[
+    ["", "Q1", "", ""],
+    ["", "", "", "Q2"],
+    ["Q3", "", "", ""],
+    ["", "", "", ""]
+]} />
+
+<br/>
+
+## Step 10
+
+Put the fourth queen ( *Q4* ) in the ( *4*, *C* ) cell.
+
+<br/>
+
+<ChessBoard data={[
+    ["", "Q1", "", ""],
+    ["", "", "", "Q2"],
+    ["Q3", "", "", ""],
+    ["", "", "Q4", ""]
+]} />
+
+<br/>
+
+## Conclusion
+
+By following the above steps, we can place 4 queens on a 4x4 chessboard so that no two queens attack each other.
