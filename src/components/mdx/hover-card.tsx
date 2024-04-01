@@ -23,7 +23,12 @@ export const MDXHoverCard = ({ children, data, width }: HoverCardProps) => {
 
   return (
     <>
-      <HoverCard width={width ?? 280} withArrow position="top-start" shadow="xl">
+      <HoverCard
+        width={width ?? 280}
+        withArrow
+        position="top-start"
+        shadow="xl"
+      >
         <HoverCard.Target>{children}</HoverCard.Target>
         <HoverCard.Dropdown>{data}</HoverCard.Dropdown>
       </HoverCard>

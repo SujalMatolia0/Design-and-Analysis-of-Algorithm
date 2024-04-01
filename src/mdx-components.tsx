@@ -13,6 +13,7 @@ import {
   Center,
   Code,
   Collapse,
+  Divider,
   Grid,
   Group,
   Paper,
@@ -81,6 +82,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     Stack: Stack,
     AreaChart: AreaChart,
     Alert: Alert,
+    Divider: Divider,
     Comparison: MDXComparison,
     HoverCard: MDXHoverCard,
 

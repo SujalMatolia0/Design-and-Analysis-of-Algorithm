@@ -62,13 +62,9 @@ $$
 
 All values are equal for any $k$ point.
 
-
-
 $$
 log^3 \ n = log \ n * log \ n * log \ n = (log \ n)^3
 $$
-
-
 
 <Cola title="Identify True and False">
 
@@ -99,3 +95,35 @@ $3^n = O(n^n)$ `TRUE`
 $log \ n^3 = O(n)$ `TRUE`
 
 </Cola>
+
+## Properties
+
+<Divider label="1" labelPosition="left" />
+
+If $f(n) = O(g(n))$ and $C.f(n) = O(g(n))$
+
+<Divider label="2 ✰" labelPosition="left" />
+
+If $f(n) = O(g(n))$ and $g(n) = O(k(n))$ then $f(n).g(n) = O(h(n).k(n))$
+
+But
+
+$f(n) + g(n) = 0(max(h(n), k(n)))$ ✰✰
+
+**Example**
+
+<SimpleGrid cols={2}>
+
+<Stack>
+
+$f(n) = n^2 + 1$
+
+</Stack>
+
+<Stack>
+
+$g(n) = n^3 + n$
+
+</Stack>
+
+</SimpleGrid>
