@@ -1,0 +1,81 @@
+# Simple loops -
+
+## problem 1 :-
+```c
+x=1;
+for(i=1;i ≤ n;i++);
+x=x+1;
+```
+
+<Divider />
+
+**Q1. How many compersions ?**
+
+$n+1$
+
+true = $n$ false = $1$
+
+<Divider />
+
+**Q2. How many times loop is executed ?**
+
+$n$
+
+<Divider />
+
+**Q3. What is the time-complexity of that logic ?**
+
+$1+1+(n+1)+n+n$
+
+$3n+3$
+
+$C(n)+C$  [ :: ignoring the constant value]
+
+$n$
+
+$O(n)$ (Worst case)
+
+<Divider />
+
+**Q4. Total CPU visit / ALU count ?**
+
+$3n+3$
+
+<Divider />
+
+## Problem 2 :-
+```c
+x=1;
+for(i=1;i ≤ n;i=i+2);
+x=x+1;
+```
+
+<Divider />
+
+**Q1. How many compersions ?**
+
+$((n+1)/2)+1$
+
+true = $(n+1)/2$ false = $1$
+
+<Divider />
+
+**Q2. How many times loop is executed ?**
+
+$(n+1)/2$ times
+
+<Divider />
+
+**Q3. What is the time-complexity of that logic ?**
+
+$(9+3n)/2$
+
+$(C+Cn)/C$  [ :: ignoring the constant value]
+
+$O(n)$ (Worst case)
+
+<Divider />
+
+**Q4. Total CPU visit / ALU count ?**
+
+$(9+3n)/2$

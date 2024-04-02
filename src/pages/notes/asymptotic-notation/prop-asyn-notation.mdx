@@ -1,0 +1,60 @@
+# Properties of Asymptotic Notation
+
+### 1. Reflexive Property - (mirror image)
+
+if a = a is reflexive 
+
+               $f(n) \geq C.(f(n))$ : c = 1
+
+               $f(n) = O(f(n))$
+
+if it means that every function is itself a upper bound.
+
+### 2. Symmetric Property -
+
+Example -   Butterfly
+
+It means that if a = b then b = a
+
+if $f(n) = O(g(n)) != g(n) = O(f(n))$
+
+### 3. Transitive Property -
+
+if a = b and b = c then a = c
+
+if $f(n) = O(g(n)) and g(n) = O(h(n)) then f(n) = O(h(n))$
+
+### 4, Transpose Property -
+
+It means that transforming one notation to another notation.
+
+if $f(n) = O(g(n)) then g(n) = Ω(f(n))$
+
+//Table
+
+
+## Best Case, Worst Case and Average Case
+
+### 1. Best Case(Ω) -
+The minimum amount of time taken by an algorithm to produce output for given input data is called best case and it is denoted by Big Omega Notation(Ω).
+
+### 2. Worst Case(O) ✰✰✰ -
+The maximum amount of time taken by an algorithm to produce output for given input data is called worst case and it is denoted by Big O Notation(O).
+
+### 3. Average Case(Θ) -
+The time lie between Best case and Worst case is called Average case  where Best and worst also included but when Best and Worst are called Average case then do not required to called it as average case simply called it as Best case and Worst case respectively.
+
+other than these two parameters Best and Worst case all parameters lie between Best and Worst case directly called Average case.
+
+// Diagram
+
+### Example - 
+If a array containts 'n' elements then the minimum no. of comperitions required to search a key solve is one unit of time and maximum amount of time is required to search a key is 'n' units of time.
+
+If no. of position(T(n)) represent the no. of comperitions required to search a key in an array of element by using sequential search then the position of T(n) is
+
+$Ω(1) \le T(n) \le O(n)$
+
+:: $T(n) = Θ(n)$
+$T(n) = O(n)$
+$T(n) = Ω(n)$

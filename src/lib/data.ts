@@ -62,6 +62,12 @@ export const NavLinks: NavLink[] = [
     group: 'asy-not',
   },
   {
+    label: 'Properties of Asymptotic Notations',
+    href: '/notes/asymptotic-notation/prop-asyn-notation',
+    description: 'Properties of Asymptotic Notations',
+    group: 'asy-not',
+  },
+  {
     label: 'Introduction',
     href: '/notes/time-complexity/introduction',
     description: 'Introduction to Time Complexity',

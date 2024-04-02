@@ -1,0 +1,42 @@
+# Big Omega Notation(Ω)
+
+if we say f(n) = Ω(g(n)), it means that for large enough values of n, the function f(n) grows at least as fast as the function g(n), with some constant factor.
+
+# Mathematically
+
+f(n) = Ω(g(n)) iff ∃ C,K
+
+such that f(n) >= C.g(n) : ∀ n >= K, C>0
+
+// graph
+
+# Problem
+
+If \( f(n) = n^2 + n + 1 \), then find \( f(n) = Ω(?) \).
+
+$f(n) = Ω(g(n))$
+
+$f(n) \geq g(n)$
+
+$n^2 \geq n^2$
+
+$n + n^2 \geq n^2$ &nbsp; &nbsp; $n+n^2 \geq n$
+
+$n^2 + n + 1 \geq n^2$ &nbsp; &nbsp; $1+n+n^2 \geq n$
+
+$f(n) = Ω(n^2)$ &nbsp; &nbsp; $f(n) = Ω(n)$
+
+<Alert title="Note">
+    Even throught $1+n+n^2$ are lower bounds to f(n), we give prefrence to greatest lower bound (GLB) always.
+
+    It means that between Ω(n) and  $Ω(n^2)$; $Ω(n^2)$ is the greatest lower bound (GLB) that's why we select $Ω(n^2)$ and that is aver best nad optimal choice.
+
+</Alert>
+
+<Alert title="Gate Note">
+  if $f(n)= C_0+C_1n+C_2n^2+C_3n^3+...+C_mn^m$
+  
+  Whare $(C_m ≠ 0)$
+
+  then $f(n)=Ω(n^m)$
+</Alert>
