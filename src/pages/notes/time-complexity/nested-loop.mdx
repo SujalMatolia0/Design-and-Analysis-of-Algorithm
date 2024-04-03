@@ -1,6 +1,8 @@
 # Nested Loops -
 
 ## Problem 1 :-
+
+<CodeS>
 ```c
 K = 1;
 for (i = 1; i ≤ 1; i++) {
@@ -9,4 +11,70 @@ for (i = 1; i ≤ 1; i++) {
     }
 }
 ```
+</CodeS>
 
+<Alert title="Values">
+Values(i) = 1,2,3,4...n
+
+Time(j) = (n+1),(n+1),(n+1),...(n+1)
+
+0r
+
+Time(K) = n,n,n,...n
+
+</Alert>
+
+**Time Complexity**
+
+$\Rightarrow O(n^2+n)$
+
+$\Rightarrow O(max(n^2+n))$
+
+$\Rightarrow O(n^2)$
+
+#### Example -
+
+let n = 3
+
+i = 1;    i < 3
+
+j = 1, 2, 3 & 4
+
+i = 2; $\le 3$
+
+j = 1, 2, 3 & 4
+
+i = 4; $\lvertneqq 3$
+
+j = x
+
+### Problem -
+
+<CodeS>
+```C
+K = 1;
+for (i = 1; i ≤ n; i++) {
+    for (j = 1; j ≤ i; j++) {
+        if (i % j == 0) {
+            for (k = 1; k ≤ j; k++) {
+                K = K + 1;
+            }
+        }
+    }
+} 
+```
+</CodeS>
+
+Always false so not executed
+
+So, n natural no. = $1 + 2 + 3 + ... + n $
+
+= $n ( n + 1 ) / 2$
+
+= $n^2 + n / 2$
+
+= $1 / 2 ( n^2 + n )$
+
+= $C ( max ( n^2, n ) )$
+
+= $O(n^2)$

@@ -86,12 +86,6 @@ export const NavLinks: NavLink[] = [
     group: 'time-comp',
   },
   {
-    label: 'If - Else Statement',
-    href: '/notes/time-complexity/if-else-statement',
-    description: 'Time Complexity of an If - Else Statement',
-    group: 'time-comp',
-  },
-  {
     label: 'Recursive Algorithm',
     href: '/notes/time-complexity/recursive-algorithm',
     description: 'Time Complexity of a Recursive Algorithm',

@@ -1,0 +1,52 @@
+# Recursive Algorithm -
+  - By Recursive Tree 
+  - By Recursive Equation
+
+
+### Recursive Tree
+  - It is a tree which is used to represent the recursive function calls.
+    - It is used to identify the time complexity of recursive algorithm.
+
+    <br/>
+
+  - Solved with help of 
+    - **Time Complexity :-** no. of (#f) of function call present in algorithm.
+    - **Space Complexity :-** Identfy the depth of recursive tree. or maximum no. of activation records available during time.
+
+### Recursive Equation
+  - It is a tree which is used to represent the recursive function calls.
+  - It is used to identify the time complexity of recursive algorithm.
+
+  <br/>
+
+  - Solved by Master's theorm
+  - Solved by Recurance Equation (Substitiution Method)
+    - Substitiution Method is used to solve the recurance equation by assuming the time complexity of the function and then proving it by induction.
+    - Learn in discreate start the run time of the algorithm.
+
+### Problem 
+Find the time complexity of the following algorithm.
+
+<CodeS>
+```c
+int fact (int n){
+    if (n == 0 || n == 1)  // The condition is called Base condition
+        return 1;
+    else
+        return n * fact(n-1);  // Recursive or Inductive condition
+}
+```
+</CodeS>
+
+$ n! = n*(n-1)*(n-2)*...*3*2*1$
+
+0! = 1
+
+1! = 1
+
+// Diagram
+
+- Total 5 function calls $( F_1, F_2, F_3, F_4, F_5)$ for  n = 5
+- For  n = n = total #f function calls = n
+
+So the time complexity of the above algorithm is $O(n)$
